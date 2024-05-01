@@ -15,30 +15,41 @@ public class MainMenuWindow extends JFrame {
     }
 
     public void launchMainMenu(){
-        JPanel panel = new JPanel(new GridLayout(3, 1, 0, 10));
+        //creating panel with BoxLayout
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton btnNewGame = new JButton();
-        editBtn(btnNewGame, "New Game");
+        //creating buttons
+        JButton btnNewGame = createButton("New Game");
+        JButton btnHighScores = createButton("High Scores");
+        JButton btnExit = createButton("Exit");
+
+        //adding buttons to the center of the screen
+        panel.add(Box.createVerticalGlue());
         panel.add(btnNewGame);
-
-        JButton btnHighScores = new JButton();
-        editBtn(btnHighScores, "High Scores");
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
         panel.add(btnHighScores);
-
-        JButton btnExit = new JButton();
-        editBtn(btnExit, "Exit");
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
         panel.add(btnExit);
+        panel.add(Box.createVerticalGlue());
 
         getContentPane().add(panel, BorderLayout.CENTER);
         setVisible(true);
     }
 
-    public void editBtn(JButton btn, String text){
-        btn.setText(text);
+    public JButton createButton(String text){
+        JButton btn = new JButton(text);
         btn.setContentAreaFilled(false);
         btn.setForeground(Color.WHITE);
-        //btn.setBorderPainted(false);
-        btn.setPreferredSize(new Dimension(100, 50));
+        btn.setBorderPainted(false);
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn.setPreferredSize(new Dimension(200, 30));
+
+        Font font = new Font("Arial", Font.BOLD, 20); // Change font family, style, and size as needed
+        btn.setFont(font);
+
+        return btn;
     }
 }
