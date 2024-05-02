@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainMenuWindow extends JFrame {
     MainMenuWindow(){
@@ -25,6 +27,7 @@ public class MainMenuWindow extends JFrame {
         JButton btnNewGame = createButton("New Game");
         JButton btnHighScores = createButton("High Scores");
         JButton btnExit = createButton("Exit");
+        exitOnClick(btnExit);
 
         //adding buttons to the center of the screen
         panel.add(Box.createVerticalGlue());
@@ -51,5 +54,14 @@ public class MainMenuWindow extends JFrame {
         btn.setFont(font);
 
         return btn;
+    }
+
+    public void exitOnClick(JButton btn){
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); //close the window
+            }
+        });
     }
 }
