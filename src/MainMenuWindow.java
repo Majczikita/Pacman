@@ -2,14 +2,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenuWindow extends JFrame {
+    private List<JFrame> openFrames;
+    private JButton btnNewGame;
+    private JButton btnHighScores;
+    private JButton btnExit;
+    private HighScoresWindow highScores;
+
     MainMenuWindow(){
         setTitle("Pacman");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500,500);
         setLocationRelativeTo(null);
         getContentPane().setBackground(Color.black);
+        openFrames = new ArrayList<>();
 
         launchMainMenu();
 
@@ -24,9 +35,10 @@ public class MainMenuWindow extends JFrame {
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //creating buttons
-        JButton btnNewGame = createButton("New Game");
-        JButton btnHighScores = createButton("High Scores");
-        JButton btnExit = createButton("Exit");
+        btnNewGame = createButton("New Game");
+        btnHighScores = createButton("High Scores");
+        highScoresOnClick(btnHighScores);
+        btnExit = createButton("Exit");
         exitOnClick(btnExit);
 
         //adding buttons to the center of the screen
@@ -49,6 +61,7 @@ public class MainMenuWindow extends JFrame {
         btn.setBorderPainted(false);
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.setPreferredSize(new Dimension(200, 30));
+        btn.setFocusable(false);
 
         Font font = new Font("Arial", Font.BOLD, 20); // Change font family, style, and size as needed
         btn.setFont(font);
@@ -60,8 +73,36 @@ public class MainMenuWindow extends JFrame {
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); //close the window
+                closeAllFrames();
             }
         });
+    }
+    public void highScoresOnClick(JButton btn){
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openHighScoresWindow();
+            }
+        });
+    }
+    private void openHighScoresWindow() {
+        if (highScores == null) {
+            highScores = new HighScoresWindow(this);
+            highScores.setVisible(true);
+            btnHighScores.setEnabled(false);
+            openFrames.add(highScores);
+        }
+    }
+    public void windowClosed() {
+        btnHighScores.setEnabled(true);
+        openFrames.remove(highScores);
+        highScores = null;
+    }
+    private void closeAllFrames() {
+        for (JFrame frame : openFrames) {
+            frame.dispose();
+        }
+        openFrames.clear();
+        dispose();
     }
 }
