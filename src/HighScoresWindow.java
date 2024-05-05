@@ -2,11 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
 
-public class HighScoresWindow extends JFrame {
+public class HighScoresWindow extends JFrame{
     private MainMenuWindow parentWindow;
 
-    HighScoresWindow(MainMenuWindow parentWindow){
+    HighScoresWindow(MainMenuWindow parentWindow) throws Exception {
         this.parentWindow = parentWindow;
         setTitle("High Scores");
         this.setSize(500,500);
@@ -20,15 +25,21 @@ public class HighScoresWindow extends JFrame {
         this.setVisible(true);
     }
 
-    private void launchHighScores() {
+    private void launchHighScores() throws Exception {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JScrollPane scroll = new JScrollPane();
-        String[] testItems = {"Maja", "Antek", "Antek2", "Maja2"};
 
-        JList<String> listHighScores = new JList<>(testItems);
-        panel.add(listHighScores);
+        Score.readFromFile();
+
+        Vector<String> testVector = new Vector<>(Score.listToString());
+        HighScoresList listModel = new HighScoresList(testVector);
+
+        JList jList = new JList(testVector);
+        jList.setModel(listModel);
+
+        panel.add(jList);
         panel.add(scroll);
         this.add(panel);
     }

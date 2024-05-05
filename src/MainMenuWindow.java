@@ -81,11 +81,15 @@ public class MainMenuWindow extends JFrame {
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openHighScoresWindow();
+                try {
+                    openHighScoresWindow();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
-    private void openHighScoresWindow() {
+    private void openHighScoresWindow() throws Exception {
         if (highScores == null) {
             highScores = new HighScoresWindow(this);
             highScores.setVisible(true);
