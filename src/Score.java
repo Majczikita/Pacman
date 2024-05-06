@@ -5,30 +5,14 @@ import java.util.List;
 public class Score implements Serializable {
     private static final long serialVersionUID = -7980315813535367733L;
     private static List<Score> scoreSorted = new ArrayList<>();
+    private static List<Score> storedData = new ArrayList<>();
     private int points;
     private String name;
 
     public Score(String name, int points) throws Exception {
         this.name = name;
         this.points = points;
-        addAndSort();
-        saveToFile();
-    }
-
-    public void addAndSort(){
-        if(scoreSorted.isEmpty()) {
-            scoreSorted.add(this);
-            return;
-        }
-        int counter = 0;
-        for(Score s : scoreSorted){
-            if(s.getPoints()<this.points){
-                scoreSorted.add(counter, this);
-                return;
-            }
-            counter++;
-        }
-        scoreSorted.add(this);
+        saveScore(this);
     }
 
     public static void addAndSort(Score score){
@@ -66,28 +50,44 @@ public class Score implements Serializable {
         }
         return result;
     }
-    public void saveToFile() throws Exception{
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/scores.txt", true))) {
-            oos.writeObject(this);
+
+    public static void saveScore(Score score) {
+        storedData = loadAllUserData();
+        storedData.add(score);
+        for(Score s : storedData){
+            addAndSort(s);
+        }
+        saveAllUserData(storedData);
+    }
+
+    public static List<Score> loadAllUserData() {
+        List<Score> dataList = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/scores.txt"))) {
+            while (true) {
+                Score score = (Score) ois.readObject();
+                dataList.add(score);
+            }
+        } catch (EOFException e) {
+            // End of file reached
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    public static void loadData(){
+        for(Score s : loadAllUserData()){
+            addAndSort(s);
         }
     }
-    public static void readFromFile() throws IOException{
-        ObjectInputStream ois = null;
-        try{
-            ois = new ObjectInputStream(new FileInputStream("src/scores.txt"));
-            while (true) {
-                try {
-                    Score score = (Score) ois.readObject();
-                    addAndSort(score);
-                } catch (EOFException e) {
-                    break;
-                }
+
+    private static void saveAllUserData(List<Score> dataList) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/scores.txt"))) {
+            for (Score score : dataList) {
+                oos.writeObject(score);
             }
-        } catch (IOException | ClassNotFoundException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if(ois != null)
-                ois.close();
         }
     }
 }

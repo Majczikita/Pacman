@@ -27,8 +27,7 @@ public class HighScoresWindow extends JFrame{
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JScrollPane scroll = new JScrollPane();
 
-        Score.readFromFile();
-
+        Score.loadData();
         Vector<String> testVector = new Vector<>(Score.listToString());
         HighScoresList listModel = new HighScoresList(testVector);
 
