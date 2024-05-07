@@ -1,7 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 public class MapMenuWindow extends JFrame {
     private MainMenuWindow parentWindow;
@@ -36,6 +39,7 @@ public class MapMenuWindow extends JFrame {
 
         //creating buttons
         btnMap1 = createButton("Small");
+        mapOnClick(btnMap1, "src/smallMap.txt");
         btnMap2 = createButton("Medium 1");
         btnMap3 = createButton("Medium 2");
         btnMap4 = createButton("Medium 3");
@@ -66,9 +70,27 @@ public class MapMenuWindow extends JFrame {
         btn.setPreferredSize(new Dimension(200, 30));
         btn.setFocusable(false);
 
-        Font font = new Font("Arial", Font.BOLD, 20); // Change font family, style, and size as needed
+        Font font = new Font("Arial", Font.BOLD, 20);
         btn.setFont(font);
 
         return btn;
+    }
+
+    public void mapOnClick(JButton btn, String path){
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Map map = new Map(path);
+                    parentWindow.addFrame(map);
+                    closeWindow();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+    }
+    public void closeWindow(){
+        this.dispose();
     }
 }

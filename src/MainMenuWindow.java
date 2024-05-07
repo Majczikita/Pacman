@@ -129,11 +129,14 @@ public class MainMenuWindow extends JFrame {
         openFrames.remove(mapMenuWindow);
         mapMenuWindow = null;
     }
-    private void closeAllFrames() {
+    public void closeAllFrames() {
         for (JFrame frame : openFrames) {
             frame.dispose();
         }
         openFrames.clear();
         dispose();
+    }
+    public void addFrame(JFrame frame){
+        openFrames.add(frame);
     }
 }
