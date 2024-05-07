@@ -11,6 +11,7 @@ public class MainMenuWindow extends JFrame {
     private JButton btnHighScores;
     private JButton btnExit;
     private HighScoresWindow highScores;
+    private MapMenuWindow mapMenuWindow;
 
     MainMenuWindow(){
         setTitle("Pacman");
@@ -34,6 +35,7 @@ public class MainMenuWindow extends JFrame {
 
         //creating buttons
         btnNewGame = createButton("New Game");
+        mapMenuOnClick(btnNewGame);
         btnHighScores = createButton("High Scores");
         highScoresOnClick(btnHighScores);
         btnExit = createButton("Exit");
@@ -95,10 +97,37 @@ public class MainMenuWindow extends JFrame {
             openFrames.add(highScores);
         }
     }
-    public void windowClosed() {
+
+    public void mapMenuOnClick(JButton btn){
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    openMapMenuWindow();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+    }
+    private void openMapMenuWindow() throws Exception {
+        if (mapMenuWindow == null) {
+            mapMenuWindow = new MapMenuWindow(this);
+            mapMenuWindow.setVisible(true);
+            btnNewGame.setEnabled(false);
+            openFrames.add(mapMenuWindow);
+        }
+    }
+
+    public void highScoresClosed() {
         btnHighScores.setEnabled(true);
         openFrames.remove(highScores);
         highScores = null;
+    }
+    public void mapMenuClosed() {
+        btnNewGame.setEnabled(true);
+        openFrames.remove(mapMenuWindow);
+        mapMenuWindow = null;
     }
     private void closeAllFrames() {
         for (JFrame frame : openFrames) {

@@ -42,7 +42,7 @@ public class HighScoresWindow extends JFrame{
     private void addCloseListener(){
         addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
-                parentWindow.windowClosed();
+                parentWindow.highScoresClosed();
             }
         });
     }
