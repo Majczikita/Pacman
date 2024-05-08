@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class MapMenuWindow extends JFrame {
     private MainMenuWindow parentWindow;
+    private Map map;
     private JButton btnMap1, btnMap2, btnMap3, btnMap4, btnMap5;
 
     MapMenuWindow(MainMenuWindow parentWindow) throws Exception {
@@ -23,6 +24,11 @@ public class MapMenuWindow extends JFrame {
 
         this.setVisible(true);
     }
+
+    public Map getMap() {
+        return map;
+    }
+
     private void addCloseListener(){
         addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
@@ -39,7 +45,7 @@ public class MapMenuWindow extends JFrame {
 
         //creating buttons
         btnMap1 = createButton("Small");
-        mapOnClick(btnMap1, "src/smallMap.txt");
+        mapOnClick(btnMap1, "src/smallMap.txt", this);
         btnMap2 = createButton("Medium 1");
         btnMap3 = createButton("Medium 2");
         btnMap4 = createButton("Medium 3");
@@ -76,12 +82,12 @@ public class MapMenuWindow extends JFrame {
         return btn;
     }
 
-    public void mapOnClick(JButton btn, String path){
+    public void mapOnClick(JButton btn, String path, MapMenuWindow w){
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Map map = new Map(path);
+                    map = new Map(path, w);
                     parentWindow.addFrame(map);
                     closeWindow();
                 } catch (Exception ex) {
@@ -91,6 +97,10 @@ public class MapMenuWindow extends JFrame {
         });
     }
     public void closeWindow(){
+        //parentWindow.getBtnNewGame().setEnabled(false);
         this.dispose();
+    }
+    public void mapClosed(){
+        parentWindow.getBtnNewGame().setEnabled(true);
     }
 }

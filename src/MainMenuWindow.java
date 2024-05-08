@@ -26,6 +26,10 @@ public class MainMenuWindow extends JFrame {
         this.setVisible(true);
     }
 
+    public JButton getBtnNewGame() {
+        return btnNewGame;
+    }
+
     public void launchMainMenu(){
         //creating panel with BoxLayout
         JPanel panel = new JPanel();
@@ -125,7 +129,9 @@ public class MainMenuWindow extends JFrame {
         highScores = null;
     }
     public void mapMenuClosed() {
-        btnNewGame.setEnabled(true);
+        if(openFrames.contains(mapMenuWindow.getMap())){
+            btnNewGame.setEnabled(false);
+        }
         openFrames.remove(mapMenuWindow);
         mapMenuWindow = null;
     }

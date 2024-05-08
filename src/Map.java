@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,14 +15,17 @@ public class Map extends JFrame {
     private int heigh;
     private List<List<Character>> map;
     private JPanel panel;
+    private MapMenuWindow parentWindow;
 
-    public Map(String path) throws IOException {
+    public Map(String path, MapMenuWindow parentWindow) throws IOException {
+        this.parentWindow = parentWindow;
         map = new ArrayList<>();
         setTitle("Pacman");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.black);
         setResizable(false);
 
+        addCloseListener();
         loadFromFile(path);
         loadMap();
 
@@ -80,5 +85,12 @@ public class Map extends JFrame {
             x++;
         }
         add(panel);
+    }
+    private void addCloseListener(){
+        addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+                parentWindow.mapClosed();
+            }
+        });
     }
 }
