@@ -47,9 +47,13 @@ public class MapMenuWindow extends JFrame {
         btnMap1 = createButton("Small");
         mapOnClick(btnMap1, "src/smallMap.txt", this);
         btnMap2 = createButton("Medium 1");
+        mapOnClick(btnMap2, "src/mediumMap1.txt", this);
         btnMap3 = createButton("Medium 2");
+        mapOnClick(btnMap3, "src/mediumMap2.txt", this);
         btnMap4 = createButton("Medium 3");
+        mapOnClick(btnMap4, "src/mediumMap3.txt", this);
         btnMap5 = createButton("Huge!!!");
+        mapOnClick(btnMap5, "src/hugeMap.txt", this);
 
         //adding buttons to the center of the screen
         panel.add(Box.createVerticalGlue());

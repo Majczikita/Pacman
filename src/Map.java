@@ -63,12 +63,12 @@ public class Map extends JFrame {
         }
     }
     public void loadMap(){
-        width = map.size();
-        heigh = map.getFirst().size();
+        heigh = map.size();
+        width = map.get(0).size();
 
         this.setSize(width*Block.BLOCK_LENGTH, heigh*Block.BLOCK_LENGTH);
         panel = new JPanel();
-        panel.setLayout(new GridLayout(width, heigh));
+        panel.setLayout(new GridLayout(heigh, width));
 
         int x = 0;
         for(List<Character> row : map){
