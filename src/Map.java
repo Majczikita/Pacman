@@ -16,6 +16,7 @@ public class Map extends JFrame {
     private List<List<Character>> map;
     private JPanel panel;
     private MapMenuWindow parentWindow;
+    private JLayeredPane mainPane;
 
     public Map(String path, MapMenuWindow parentWindow) throws IOException {
         this.parentWindow = parentWindow;
@@ -28,6 +29,10 @@ public class Map extends JFrame {
         addCloseListener();
         loadFromFile(path);
         loadMap();
+
+        Pacman p = new Pacman("src/pacman.png", 320, 350);
+        mainPane.add(p, JLayeredPane.POPUP_LAYER);
+        addKeyListener(p);
 
         setLocationRelativeTo(null);
         this.setVisible(true);
@@ -66,9 +71,14 @@ public class Map extends JFrame {
         heigh = map.size();
         width = map.get(0).size();
 
-        this.setSize(width*Block.BLOCK_LENGTH, heigh*Block.BLOCK_LENGTH);
+        this.setSize(width*Block.BLOCK_LENGTH+10, heigh*Block.BLOCK_LENGTH+Block.BLOCK_LENGTH);
+        mainPane = new JLayeredPane();
+        mainPane.setPreferredSize(new Dimension(width*Block.BLOCK_LENGTH, heigh*Block.BLOCK_LENGTH));
+        getContentPane().add(mainPane);
+
         panel = new JPanel();
         panel.setLayout(new GridLayout(heigh, width));
+        panel.setBounds(0, 0, width*Block.BLOCK_LENGTH, heigh*Block.BLOCK_LENGTH);
 
         int x = 0;
         for(List<Character> row : map){
@@ -84,7 +94,9 @@ public class Map extends JFrame {
             }
             x++;
         }
-        add(panel);
+
+        mainPane.add(panel, JLayeredPane.DEFAULT_LAYER);
+        //add(panel);
     }
     private void addCloseListener(){
         addWindowListener(new WindowAdapter() {
