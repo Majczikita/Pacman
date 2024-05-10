@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Block extends JLabel{
-    public static final int BLOCK_LENGTH = 35;
+    public static final int BLOCK_LENGTH = 30;
     private int x, y;
     private Color color;
 

@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Entity extends JLabel {
+public abstract class Entity extends JLabel {
     protected int size;
     protected ImageIcon icon;
     protected int direction;
@@ -11,9 +11,9 @@ public class Entity extends JLabel {
     protected static final int DOWN = 0;
     protected static final int LEFT = 270;
 
-    public Entity(String path, int x, int y){
+    public Entity(String path){
         size = Block.BLOCK_LENGTH;
-        setBounds(x, y, size, size);
+        setBounds(setStartingX(), setStartingY(), size, size);
         icon = loadIcon(path);
         setIcon(icon);
         setHorizontalAlignment(SwingConstants.CENTER);
@@ -30,4 +30,7 @@ public class Entity extends JLabel {
     public void printDirection(){
         System.out.println(direction);
     }
+
+    public abstract int setStartingX();
+    public abstract int setStartingY();
 }

@@ -13,7 +13,7 @@ public class Map extends JFrame {
     public static final char BORDER = '1';
     private int width;
     private int heigh;
-    private List<List<Character>> map;
+    public static List<List<Character>> map;
     private JPanel panel;
     private MapMenuWindow parentWindow;
     private JLayeredPane mainPane;
@@ -30,7 +30,7 @@ public class Map extends JFrame {
         loadFromFile(path);
         loadMap();
 
-        Pacman p = new Pacman("src/pacman.png", 320, 350);
+        Pacman p = new Pacman("src/pacman.png");
         mainPane.add(p, JLayeredPane.POPUP_LAYER);
         addKeyListener(p);
 
