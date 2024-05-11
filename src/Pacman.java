@@ -6,14 +6,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Pacman extends Entity implements KeyListener {
-    public Pacman(String path){
-        super(path);
+    public Pacman(String path1, String path2){
+        super(path1, path2);
         direction = RIGHT;
     }
 
     @Override
     public int setStartingX(){
-        System.out.println((Map.map.get(0).size()/2)*Block.BLOCK_LENGTH);
         return (Map.map.get(0).size()/2)*Block.BLOCK_LENGTH;
     }
 
@@ -101,10 +100,10 @@ public class Pacman extends Entity implements KeyListener {
     }
 
     public void changeIconDirection(int prev, int current){
-        icon = rotateIcon(prev - current);
-        setIcon(icon);
+        testIcon = rotateIcon(prev - current, testIcon);
+        currentIcon = rotateIcon(prev - current, currentIcon);
     }
-    public ImageIcon rotateIcon(double degrees) {
+    public ImageIcon rotateIcon(double degrees, ImageIcon icon) {
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
 

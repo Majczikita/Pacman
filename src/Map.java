@@ -17,6 +17,8 @@ public class Map extends JFrame {
     private JPanel panel;
     private MapMenuWindow parentWindow;
     private JLayeredPane mainPane;
+    private Thread pacmanAnimation;
+    private Pacman pacman;
 
     public Map(String path, MapMenuWindow parentWindow) throws IOException {
         this.parentWindow = parentWindow;
@@ -30,9 +32,12 @@ public class Map extends JFrame {
         loadFromFile(path);
         loadMap();
 
-        Pacman p = new Pacman("src/pacman.png");
-        mainPane.add(p, JLayeredPane.POPUP_LAYER);
-        addKeyListener(p);
+        //add pacman
+        pacman = new Pacman("src/pacman1.png", "src/pacman2.png");
+        mainPane.add(pacman, JLayeredPane.POPUP_LAYER);
+        addKeyListener(pacman);
+        pacmanAnimation = new Thread(pacman);
+        pacmanAnimation.start();
 
         setLocationRelativeTo(null);
         this.setVisible(true);
@@ -102,6 +107,7 @@ public class Map extends JFrame {
         addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
                 parentWindow.mapClosed();
+                pacman.isThread = false;
             }
         });
     }
