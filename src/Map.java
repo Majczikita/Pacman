@@ -18,6 +18,7 @@ public class Map extends JFrame {
     private MapMenuWindow parentWindow;
     private JLayeredPane mainPane;
     private Thread pacmanAnimation;
+    private Thread pacmanWalking;
     private Pacman pacman;
 
     public Map(String path, MapMenuWindow parentWindow) throws IOException {
@@ -37,7 +38,9 @@ public class Map extends JFrame {
         mainPane.add(pacman, JLayeredPane.POPUP_LAYER);
         addKeyListener(pacman);
         pacmanAnimation = new Thread(pacman);
+        pacmanWalking = new Thread(pacman);
         pacmanAnimation.start();
+        pacmanWalking.start();
 
         setLocationRelativeTo(null);
         this.setVisible(true);

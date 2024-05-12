@@ -5,10 +5,109 @@ import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-public class Pacman extends Entity implements KeyListener {
+public class Pacman extends Entity implements KeyListener, Runnable {
     public Pacman(String path1, String path2){
         super(path1, path2);
         direction = RIGHT;
+        savedDirection = NULL;
+    }
+    @Override
+    public void run(){
+        //ANIMATION THREAD
+        if(!isAnimation){
+            isAnimation = true;
+            while(isThread) {
+                setIcon(icon1);
+                try {
+                    Thread.sleep(70);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                setIcon(icon2);
+                try {
+                    Thread.sleep(70);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        //WALKING THREAD
+        if(isAnimation && !isWalking){
+            isWalking = true;
+            while(isThread){
+                float blockX = (float) getX()/Block.BLOCK_LENGTH, blockY = (float) getY()/Block.BLOCK_LENGTH;
+                int newX = getX(), newY = getY();
+                if(direction == LEFT){
+                    if(!changeDirection(direction, blockX, blockY)) newX = newX - STEP;
+                    changeLocation(newX, newY);
+
+                } else if(direction == RIGHT){
+                    if(!changeDirection(direction, blockX, blockY)) newX = newX + STEP;
+                    changeLocation(newX, newY);
+                    changeLocation(newX, newY);
+
+                } else if(direction == UP){
+                    if(!changeDirection(direction, blockX, blockY)) newY = newY - STEP;
+                    changeLocation(newX, newY);
+
+                } else if(direction == DOWN){
+                    if(!changeDirection(direction, blockX, blockY)) newY = newY + STEP;
+                    changeLocation(newX, newY);
+                }
+                try {
+                    Thread.sleep(40);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+    public boolean changeDirection(int currentDirection, float x, float y){
+        if(savedDirection!=NULL && savedDirection!=currentDirection){
+            if(tryLeft(x, y)) return true;
+            if(tryRight(x, y)) return true;
+            if(tryUp(x, y)) return true;
+            return tryDown(x, y);
+        }
+        return false;
+    }
+
+    public boolean tryUp(float x, float y){
+        if(direction!=UP && savedDirection == UP && x%1==0 && Map.map.get((int)y-1).get((int)x) == Map.PATH){
+            changeIconDirection(direction, savedDirection);
+            savedDirection = NULL;
+            direction = UP;
+            return true;
+        }
+        return false;
+    }
+    public boolean tryDown(float x, float y){
+        if(direction!=DOWN && savedDirection == DOWN && x%1==0 && Map.map.get((int)y+1).get((int)x) == Map.PATH){
+            changeIconDirection(direction, savedDirection);
+            savedDirection = NULL;
+            direction = DOWN;
+            return true;
+        }
+        return false;
+    }
+    public boolean tryLeft(float x, float y){
+        if(direction!=LEFT && savedDirection == LEFT && y%1==0 && Map.map.get((int)y).get((int)x-1) == Map.PATH){
+            changeIconDirection(direction, savedDirection);
+            savedDirection = NULL;
+            direction = LEFT;
+            return true;
+        }
+        return false;
+    }
+    public boolean tryRight(float x, float y){
+        if(direction!=RIGHT && savedDirection == RIGHT && y%1==0 && Map.map.get((int)y).get((int)x+1) == Map.PATH){
+            changeIconDirection(direction, savedDirection);
+            savedDirection = NULL;
+            direction = RIGHT;
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -30,32 +129,24 @@ public class Pacman extends Entity implements KeyListener {
     public void keyTyped(KeyEvent e) {
         switch(e.getKeyChar()){
             case 'a':
-                if(direction != LEFT){
-                    changeIconDirection(direction, LEFT);
-                    direction = LEFT;
+                if(savedDirection != LEFT){
+                    savedDirection = LEFT;
                 }
-                changeLocation(getX()-10, getY());
                 break;
             case 'd':
-                if(direction != RIGHT){
-                    changeIconDirection(direction, RIGHT);
-                    direction = RIGHT;
+                if(savedDirection != RIGHT){
+                    savedDirection = RIGHT;
                 }
-                changeLocation(getX()+10, getY());
                 break;
             case 'w':
-                if(direction != UP){
-                    changeIconDirection(direction, UP);
-                    direction = UP;
+                if(savedDirection != UP){
+                    savedDirection = UP;
                 }
-                changeLocation(getX(), getY()-10);
                 break;
             case 's':
-                if(direction != DOWN){
-                    changeIconDirection(direction, DOWN);
-                    direction = DOWN;
+                if(savedDirection != DOWN){
+                    savedDirection = DOWN;
                 }
-                changeLocation(getX(), getY()+10);
                 break;
         }
     }
@@ -64,32 +155,24 @@ public class Pacman extends Entity implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()){
             case 37:
-                if(direction != LEFT) {
-                    changeIconDirection(direction, LEFT);
-                    direction = LEFT;
+                if(savedDirection != LEFT) {
+                    savedDirection = LEFT;
                 }
-                changeLocation(getX()-10, getY());
                 break;
             case 39:
-                if(direction != RIGHT){
-                    changeIconDirection(direction, RIGHT);
-                    direction = RIGHT;
+                if(savedDirection != RIGHT){
+                    savedDirection = RIGHT;
                 }
-                changeLocation(getX()+10, getY());
                 break;
             case 38:
-                if(direction != UP){
-                    changeIconDirection(direction, UP);
-                    direction = UP;
+                if(savedDirection != UP){
+                    savedDirection = UP;
                 }
-                changeLocation(getX(), getY()-10);
                 break;
             case 40:
-                if(direction != DOWN){
-                    changeIconDirection(direction, DOWN);
-                    direction = DOWN;
+                if(savedDirection != DOWN){
+                    savedDirection = DOWN;
                 }
-                changeLocation(getX(), getY()+10);
                 break;
         }
     }
@@ -100,8 +183,8 @@ public class Pacman extends Entity implements KeyListener {
     }
 
     public void changeIconDirection(int prev, int current){
-        testIcon = rotateIcon(prev - current, testIcon);
-        currentIcon = rotateIcon(prev - current, currentIcon);
+        icon1 = rotateIcon(prev - current, icon1);
+        icon2 = rotateIcon(prev - current, icon2);
     }
     public ImageIcon rotateIcon(double degrees, ImageIcon icon) {
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -118,7 +201,7 @@ public class Pacman extends Entity implements KeyListener {
     }
     public void changeLocation(int x, int y){
         if(direction == RIGHT){
-            float blockX = (float)(x-10)/Block.BLOCK_LENGTH, blockY = (float)y/Block.BLOCK_LENGTH;
+            float blockX = (float)(x-STEP)/Block.BLOCK_LENGTH, blockY = (float)y/Block.BLOCK_LENGTH;
             if(blockY%1==0){
                 if(Map.map.get((int)blockY).get((int)blockX+1)==Map.PATH){
                     setLocation(x, y);
@@ -132,7 +215,7 @@ public class Pacman extends Entity implements KeyListener {
 
         }
         else if(direction == DOWN){
-            float blockX = (float)x/Block.BLOCK_LENGTH, blockY = (float)(y-10)/Block.BLOCK_LENGTH;
+            float blockX = (float)x/Block.BLOCK_LENGTH, blockY = (float)(y-STEP)/Block.BLOCK_LENGTH;
             if(blockX%1==0){
                 if(Map.map.get((int)blockY+1).get((int)blockX)==Map.PATH){
                     setLocation(x, y);
