@@ -10,10 +10,12 @@ public abstract class Entity extends JLabel {
     protected ImageIcon icon1;
     protected ImageIcon icon2;
     protected int direction;
-    protected int savedDirection;
     protected boolean isThread;
     protected boolean isAnimation;
     protected boolean isWalking;
+
+    //ghost color
+    protected ColorEnum color;
 
     protected static final int UP = 180;
     protected static final int RIGHT = 90;
@@ -24,6 +26,7 @@ public abstract class Entity extends JLabel {
 
     protected static final int STEP = 5;
 
+    //pacman constructor
     public Entity(String path1, String path2){
         size = Block.BLOCK_LENGTH;
         setBounds(setStartingX(), setStartingY(), size, size);
@@ -36,15 +39,22 @@ public abstract class Entity extends JLabel {
         isWalking = false;
     }
 
+    //ghost constructor
+    public Entity(ColorEnum color){
+        this.color = color;
+        size = Block.BLOCK_LENGTH;
+        setBounds(setStartingX(), setStartingY(), size, size);
+        setHorizontalAlignment(SwingConstants.CENTER);
+        setVerticalAlignment(SwingConstants.CENTER);
+        isThread = true;
+    }
+
     public ImageIcon loadIcon(String path){
         ImageIcon icon = new ImageIcon(path);
         Image img = icon.getImage();
         img = img.getScaledInstance(size-5, size-5, Image.SCALE_SMOOTH);
         icon = new ImageIcon(img);
         return icon;
-    }
-    public void printDirection(){
-        System.out.println(direction);
     }
 
     public abstract int setStartingX();

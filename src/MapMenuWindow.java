@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 public class MapMenuWindow extends JFrame {
     private MainMenuWindow parentWindow;
@@ -45,15 +44,15 @@ public class MapMenuWindow extends JFrame {
 
         //creating buttons
         btnMap1 = createButton("Small");
-        mapOnClick(btnMap1, "src/smallMap.txt", this);
+        mapOnClick(btnMap1, "src/map/smallMap.txt", this);
         btnMap2 = createButton("Medium 1");
-        mapOnClick(btnMap2, "src/mediumMap1.txt", this);
+        mapOnClick(btnMap2, "src/map/mediumMap1.txt", this);
         btnMap3 = createButton("Medium 2");
-        mapOnClick(btnMap3, "src/mediumMap2.txt", this);
+        mapOnClick(btnMap3, "src/map/mediumMap2.txt", this);
         btnMap4 = createButton("Medium 3");
-        mapOnClick(btnMap4, "src/mediumMap3.txt", this);
+        mapOnClick(btnMap4, "src/map/mediumMap3.txt", this);
         btnMap5 = createButton("Huge!!!");
-        mapOnClick(btnMap5, "src/hugeMap.txt", this);
+        mapOnClick(btnMap5, "src/map/hugeMap.txt", this);
 
         //adding buttons to the center of the screen
         panel.add(Box.createVerticalGlue());

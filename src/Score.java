@@ -62,7 +62,7 @@ public class Score implements Serializable {
 
     public static List<Score> loadAllUserData() {
         List<Score> dataList = new ArrayList<>();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/scores.txt"))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/score/scores.txt"))) {
             while (true) {
                 Score score = (Score) ois.readObject();
                 dataList.add(score);

@@ -6,6 +6,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Pacman extends Entity implements KeyListener, Runnable {
+    private int savedDirection;
     public Pacman(String path1, String path2){
         super(path1, path2);
         direction = RIGHT;
@@ -121,7 +122,7 @@ public class Pacman extends Entity implements KeyListener, Runnable {
             return 9 * Block.BLOCK_LENGTH;
         } else if(Map.map.size() == 21){
             return 11 * Block.BLOCK_LENGTH;
-        }else if(Map.map.size() == 20 || Map.map.size() == 18){
+        }else if(Map.map.size() == 20 || Map.map.size() == 19){
             return 10 * Block.BLOCK_LENGTH;
         } else return 0;
     }

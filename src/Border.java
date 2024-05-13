@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 
 public class Border extends Block{

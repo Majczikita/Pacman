@@ -20,6 +20,10 @@ public class Map extends JFrame {
     private Thread pacmanAnimation;
     private Thread pacmanWalking;
     private Pacman pacman;
+    private Ghost ghostRed;
+    private Ghost ghostPink;
+    private Ghost ghostOrange;
+    private Ghost ghostBlue;
 
     public Map(String path, MapMenuWindow parentWindow) throws IOException {
         this.parentWindow = parentWindow;
@@ -33,8 +37,19 @@ public class Map extends JFrame {
         loadFromFile(path);
         loadMap();
 
+        //add four ghosts
+        ghostRed = new Ghost(ColorEnum.RED);
+        ghostPink = new Ghost(ColorEnum.PINK);
+        ghostBlue = new Ghost(ColorEnum.BLUE);
+        ghostOrange = new Ghost(ColorEnum.ORANGE);
+
+        mainPane.add(ghostRed, JLayeredPane.POPUP_LAYER);
+        mainPane.add(ghostPink, JLayeredPane.POPUP_LAYER);
+        mainPane.add(ghostBlue, JLayeredPane.POPUP_LAYER);
+        mainPane.add(ghostOrange, JLayeredPane.POPUP_LAYER);
+
         //add pacman
-        pacman = new Pacman("src/pacman1.png", "src/pacman2.png");
+        pacman = new Pacman("src/img/pacman/pacman1.png", "src/img/pacman/pacman2.png");
         mainPane.add(pacman, JLayeredPane.POPUP_LAYER);
         addKeyListener(pacman);
         pacmanAnimation = new Thread(pacman);
@@ -67,14 +82,7 @@ public class Map extends JFrame {
                 br.close();
         }
     }
-    public void printMap(){
-        for(List<Character> row : map){
-            for(char c : row){
-                System.out.print(c);
-            }
-            System.out.println();
-        }
-    }
+
     public void loadMap(){
         heigh = map.size();
         width = map.get(0).size();
@@ -104,8 +112,8 @@ public class Map extends JFrame {
         }
 
         mainPane.add(panel, JLayeredPane.DEFAULT_LAYER);
-        //add(panel);
     }
+
     private void addCloseListener(){
         addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
