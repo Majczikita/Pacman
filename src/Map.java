@@ -135,6 +135,11 @@ public class Map extends JFrame {
             public void windowClosed(WindowEvent e) {
                 parentWindow.mapClosed();
                 Entity.isThread = false;
+
+                ghostOrange.setBounds(0,0,0,0);
+                ghostBlue.setBounds(0,0,0,0);
+                ghostPink.setBounds(0,0,0,0);
+                ghostRed.setBounds(0,0,0,0);
             }
         });
     }

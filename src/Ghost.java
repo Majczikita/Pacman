@@ -5,16 +5,18 @@ import java.util.Random;
 public class Ghost extends Entity implements Runnable{
     private String pathR, pathU, pathL, pathD;
     private String mainPath = "src/img";
+    private final ColorEnum color;
 
     public Ghost(ColorEnum colorEnum){
-        super(colorEnum);
         this.color = colorEnum;
         startingConfig();
         setIcon(loadIcon(pathR));
+        ghosts.add(this);
     }
 
     @Override
     public void run() {
+        setBounds(setStartingX(), setStartingY(), size, size);
         float blockX, blockY;
         int newX, newY;
         List<Integer> availableDirections = new ArrayList<>();

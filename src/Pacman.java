@@ -6,11 +6,19 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Pacman extends Entity implements KeyListener, Runnable {
+    private ImageIcon icon1;
+    private ImageIcon icon2;
+    private boolean isAnimation;
+    private boolean isWalking;
     private int savedDirection;
+
     public Pacman(String path1, String path2){
-        super(path1, path2);
+        icon1 = loadIcon(path1);
+        icon2 = loadIcon(path2);
         direction = RIGHT;
         savedDirection = NULL;
+        isAnimation = false;
+        isWalking = false;
     }
     @Override
     public void run(){
@@ -39,6 +47,12 @@ public class Pacman extends Entity implements KeyListener, Runnable {
             while(isThread){
                 float blockX = (float) getX()/Block.BLOCK_LENGTH, blockY = (float) getY()/Block.BLOCK_LENGTH;
                 int newX = getX(), newY = getY();
+
+                if(isCollision(newX, newY)){
+                    isThread = false;
+                    break;
+                }
+
                 if(direction == LEFT){
                     if(!changeDirection(direction, blockX, blockY)) newX = newX - STEP;
                     changeLocation(newX, newY);
@@ -63,6 +77,17 @@ public class Pacman extends Entity implements KeyListener, Runnable {
             }
         }
     }
+    public boolean isCollision(float x, float y){
+        for(Entity ghost : ghosts){
+            if((int)x == ghost.getX() && (int)y == ghost.getY()) return true;
+            if((int)x == ghost.getX()-STEP && (int)y == ghost.getY()) return true;
+            if((int)x == ghost.getX()+STEP && (int)y == ghost.getY()) return true;
+            if((int)x == ghost.getX() && (int)y == ghost.getY()-STEP) return true;
+            if((int)x == ghost.getX() && (int)y == ghost.getY()+STEP) return true;
+        }
+        return false;
+    }
+
     public boolean changeDirection(int currentDirection, float x, float y){
         if(savedDirection!=NULL && savedDirection!=currentDirection){
             if(tryLeft(x, y)) return true;
