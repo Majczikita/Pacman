@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Ghost extends Entity implements Runnable{
-    private int startX, startY;
     private String pathR, pathU, pathL, pathD;
     private String mainPath = "src/img";
 
@@ -26,6 +25,7 @@ public class Ghost extends Entity implements Runnable{
             newX = getX();
             newY = getY();
             availableDirections.clear();
+            switchIcon();
 
             if(direction == RIGHT){
                 if(blockX%1==0 && blockY%1==0){
@@ -76,6 +76,15 @@ public class Ghost extends Entity implements Runnable{
             case LEFT -> (Map.map.get(y).get(x - 1) == Map.PATH);
             default -> false;
         };
+    }
+
+    public void switchIcon(){
+        switch(direction){
+            case UP -> setIcon(loadIcon(pathU));
+            case LEFT -> setIcon(loadIcon(pathL));
+            case RIGHT -> setIcon(loadIcon(pathR));
+            case DOWN -> setIcon(loadIcon(pathD));
+        }
     }
 
     public int pickRandomDirection(List<Integer> directions){
