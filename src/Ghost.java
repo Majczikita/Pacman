@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Ghost extends Entity implements Runnable{
     private int startX, startY;
     private String pathR, pathU, pathL, pathD;
@@ -12,7 +16,86 @@ public class Ghost extends Entity implements Runnable{
 
     @Override
     public void run() {
+        float blockX, blockY;
+        int newX, newY;
+        List<Integer> availableDirections = new ArrayList<>();
 
+        while(isThread){
+            blockX = (float) getX()/Block.BLOCK_LENGTH;
+            blockY = (float) getY()/Block.BLOCK_LENGTH;
+            newX = getX();
+            newY = getY();
+            availableDirections.clear();
+
+            if(direction == RIGHT){
+                if(blockX%1==0 && blockY%1==0){
+                    if(canTurn(UP, (int)blockX, (int)blockY)) availableDirections.add(UP);
+                    if(canTurn(DOWN, (int)blockX, (int)blockY)) availableDirections.add(DOWN);
+                    if(canTurn(RIGHT, (int)blockX, (int)blockY)) availableDirections.add(RIGHT);
+
+                    direction = makeStep(newX, newY, availableDirections, LEFT);
+                } else setLocation(newX + STEP, newY);
+            } else if(direction == DOWN){
+                if(blockX%1==0 && blockY%1==0){
+                    if(canTurn(LEFT, (int)blockX, (int)blockY)) availableDirections.add(LEFT);
+                    if(canTurn(DOWN, (int)blockX, (int)blockY)) availableDirections.add(DOWN);
+                    if(canTurn(RIGHT, (int)blockX, (int)blockY)) availableDirections.add(RIGHT);
+
+                    direction = makeStep(newX, newY, availableDirections, UP);
+                } else setLocation(newX, newY + STEP);
+            } else if(direction == LEFT){
+                if(blockX%1==0 && blockY%1==0){
+                    if(canTurn(LEFT, (int)blockX, (int)blockY)) availableDirections.add(LEFT);
+                    if(canTurn(DOWN, (int)blockX, (int)blockY)) availableDirections.add(DOWN);
+                    if(canTurn(UP, (int)blockX, (int)blockY)) availableDirections.add(UP);
+
+                    direction = makeStep(newX, newY, availableDirections, RIGHT);
+                } else setLocation(newX - STEP, newY);
+            } else if(direction == UP){
+                if(blockX%1==0 && blockY%1==0){
+                    if(canTurn(LEFT, (int)blockX, (int)blockY)) availableDirections.add(LEFT);
+                    if(canTurn(UP, (int)blockX, (int)blockY)) availableDirections.add(UP);
+                    if(canTurn(RIGHT, (int)blockX, (int)blockY)) availableDirections.add(RIGHT);
+
+                    direction = makeStep(newX, newY, availableDirections, DOWN);
+                } else setLocation(newX, newY - STEP);
+            }
+
+            try {
+                Thread.sleep(WAIT_TIME);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public boolean canTurn(int direction, int x, int y){
+        return switch (direction) {
+            case UP -> (Map.map.get(y - 1).get(x) == Map.PATH);
+            case RIGHT -> (Map.map.get(y).get(x + 1) == Map.PATH);
+            case DOWN -> (Map.map.get(y + 1).get(x) == Map.PATH);
+            case LEFT -> (Map.map.get(y).get(x - 1) == Map.PATH);
+            default -> false;
+        };
+    }
+
+    public int pickRandomDirection(List<Integer> directions){
+        Random random = new Random();
+        return random.nextInt(directions.size());
+    }
+
+    public int makeStep(int x, int y, List<Integer> list, int opposite){
+        int newDirection;
+        if(list.size()==1) newDirection = list.getFirst();
+        else if(list.isEmpty()) newDirection = opposite;
+        else newDirection = list.get(pickRandomDirection(list));
+
+        switch (newDirection) {
+            case UP -> setLocation(x, y - STEP);
+            case RIGHT -> setLocation(x + STEP, y);
+            case DOWN -> setLocation(x, y + STEP);
+            case LEFT -> setLocation(x - STEP, y);
+        }
+        return newDirection;
     }
 
     public void startingConfig(){

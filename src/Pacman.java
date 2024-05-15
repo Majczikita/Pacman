@@ -46,7 +46,6 @@ public class Pacman extends Entity implements KeyListener, Runnable {
                 } else if(direction == RIGHT){
                     if(!changeDirection(direction, blockX, blockY)) newX = newX + STEP;
                     changeLocation(newX, newY);
-                    changeLocation(newX, newY);
 
                 } else if(direction == UP){
                     if(!changeDirection(direction, blockX, blockY)) newY = newY - STEP;
@@ -57,7 +56,7 @@ public class Pacman extends Entity implements KeyListener, Runnable {
                     changeLocation(newX, newY);
                 }
                 try {
-                    Thread.sleep(40);
+                    Thread.sleep(WAIT_TIME);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

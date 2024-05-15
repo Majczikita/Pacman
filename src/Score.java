@@ -9,7 +9,7 @@ public class Score implements Serializable {
     private int points;
     private String name;
 
-    public Score(String name, int points) throws Exception {
+    public Score(String name, int points){
         this.name = name;
         this.points = points;
         saveScore(this);
@@ -88,6 +88,12 @@ public class Score implements Serializable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void scoreReset(){
+        for(Score s : scoreSorted){
+            scoreSorted.remove(s);
         }
     }
 }

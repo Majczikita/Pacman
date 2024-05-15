@@ -10,7 +10,7 @@ public abstract class Entity extends JLabel {
     protected ImageIcon icon1;
     protected ImageIcon icon2;
     protected int direction;
-    protected boolean isThread;
+    protected static boolean isThread;
     protected boolean isAnimation;
     protected boolean isWalking;
 
@@ -25,6 +25,7 @@ public abstract class Entity extends JLabel {
     protected static final int NULL = -1;
 
     protected static final int STEP = 5;
+    protected static final int WAIT_TIME = 40;
 
     //pacman constructor
     public Entity(String path1, String path2){
@@ -46,6 +47,7 @@ public abstract class Entity extends JLabel {
         setBounds(setStartingX(), setStartingY(), size, size);
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
+        direction = RIGHT;
         isThread = true;
     }
 
