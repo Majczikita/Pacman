@@ -18,18 +18,12 @@ public class Map extends JFrame {
     private MapMenuWindow parentWindow;
     private JLayeredPane mainPane;
 
-    private Thread pacmanAnimation;
-    private Thread pacmanWalking;
     private Pacman pacman;
 
-    private Ghost ghostRed;
-    private Ghost ghostPink;
-    private Ghost ghostOrange;
-    private Ghost ghostBlue;
-    private Thread ghostRedThread;
-    private Thread ghostPinkThread;
-    private Thread ghostOrangeThread;
-    private Thread ghostBlueThread;
+    private final Ghost ghostRed;
+    private final Ghost ghostPink;
+    private final Ghost ghostOrange;
+    private final Ghost ghostBlue;
 
     public Map(String path, MapMenuWindow parentWindow) throws IOException {
         this.parentWindow = parentWindow;
@@ -37,7 +31,6 @@ public class Map extends JFrame {
         setTitle("Pacman");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.black);
-        //setResizable(false);
 
         addCloseListener();
         loadFromFile(path);
@@ -49,29 +42,16 @@ public class Map extends JFrame {
         ghostBlue = new Ghost(ColorEnum.BLUE);
         ghostOrange = new Ghost(ColorEnum.ORANGE);
 
-        mainPane.add(ghostRed, JLayeredPane.POPUP_LAYER);
-        mainPane.add(ghostPink, JLayeredPane.POPUP_LAYER);
-        mainPane.add(ghostBlue, JLayeredPane.POPUP_LAYER);
-        mainPane.add(ghostOrange, JLayeredPane.POPUP_LAYER);
-
-        ghostRedThread = new Thread(ghostRed);
-        ghostPinkThread = new Thread(ghostPink);
-        ghostOrangeThread = new Thread(ghostOrange);
-        ghostBlueThread = new Thread(ghostBlue);
-
-        ghostRedThread.start();
-        ghostPinkThread.start();
-        ghostOrangeThread.start();
-        ghostBlueThread.start();
-
         //add pacman
         pacman = new Pacman("src/img/pacman/pacman1.png", "src/img/pacman/pacman2.png");
-        mainPane.add(pacman, JLayeredPane.POPUP_LAYER);
         addKeyListener(pacman);
-        pacmanAnimation = new Thread(pacman);
-        pacmanWalking = new Thread(pacman);
-        pacmanAnimation.start();
-        pacmanWalking.start();
+
+        Entity.startThreads();
+
+        //add entities to mainPane
+        for(Entity entity : Entity.entities){
+            mainPane.add(entity, JLayeredPane.POPUP_LAYER);
+        }
 
         setLocationRelativeTo(null);
         this.setVisible(true);

@@ -8,9 +8,9 @@ import java.awt.image.BufferedImage;
 public class Pacman extends Entity implements KeyListener, Runnable {
     private ImageIcon icon1;
     private ImageIcon icon2;
+    private int savedDirection;
     private boolean isAnimation;
     private boolean isWalking;
-    private int savedDirection;
 
     public Pacman(String path1, String path2){
         icon1 = loadIcon(path1);
@@ -19,6 +19,7 @@ public class Pacman extends Entity implements KeyListener, Runnable {
         savedDirection = NULL;
         isAnimation = false;
         isWalking = false;
+        walkingThread = new Thread(this);
     }
     @Override
     public void run(){
@@ -50,6 +51,14 @@ public class Pacman extends Entity implements KeyListener, Runnable {
 
                 if(isCollision(newX, newY)){
                     isThread = false;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    isAnimation = false;
+                    isWalking = false;
+                    startThreads();
                     break;
                 }
 
@@ -79,6 +88,7 @@ public class Pacman extends Entity implements KeyListener, Runnable {
     }
     public boolean isCollision(float x, float y){
         for(Entity ghost : ghosts){
+            //checking collision in range because of multi-threading
             if((int)x == ghost.getX() && (int)y == ghost.getY()) return true;
             if((int)x == ghost.getX()-STEP && (int)y == ghost.getY()) return true;
             if((int)x == ghost.getX()+STEP && (int)y == ghost.getY()) return true;

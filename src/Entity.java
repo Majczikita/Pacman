@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Entity extends JLabel {
-    protected int size;
+public abstract class Entity extends JLabel implements  Runnable{
+    protected static int size;
     protected int direction;
     protected static boolean isThread;
 
@@ -20,6 +21,9 @@ public abstract class Entity extends JLabel {
     protected static final int WAIT_TIME = 40;
 
     protected static List<Entity> ghosts;
+    protected static List<Entity> entities;
+    protected Thread thread;
+    protected Thread walkingThread;
 
     public Entity(){
         size = Block.BLOCK_LENGTH;
@@ -27,7 +31,10 @@ public abstract class Entity extends JLabel {
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
         isThread = true;
+        thread = new Thread(this);
         if(ghosts==null) ghosts = new ArrayList<>();
+        if(entities==null) entities = new ArrayList<>();
+        entities.add(this);
     }
 
     public ImageIcon loadIcon(String path){
@@ -38,8 +45,18 @@ public abstract class Entity extends JLabel {
         return icon;
     }
 
-    public void deleteEntity(){
+    public static void startThreads(){
+        isThread = true;
+        for(Entity entity : entities){
+            entity.setBounds(entity.setStartingX(), entity.setStartingY(), size, size);
+            entity.thread = new Thread(entity);
+            entity.thread.start();
 
+            if(entity instanceof KeyListener){
+                entity.walkingThread = new Thread(entity);
+                entity.walkingThread.start();
+            }
+        }
     }
 
     public abstract int setStartingX();
