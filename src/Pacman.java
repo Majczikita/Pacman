@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 public class Pacman extends Entity implements KeyListener, Runnable {
     private ImageIcon icon1;
@@ -12,7 +13,9 @@ public class Pacman extends Entity implements KeyListener, Runnable {
     private boolean isAnimation;
     private boolean isWalking;
 
-    public Pacman(String path1, String path2){
+    private Score score;
+
+    public Pacman(String path1, String path2, Score score){
         icon1 = loadIcon(path1);
         icon2 = loadIcon(path2);
         direction = RIGHT;
@@ -20,6 +23,8 @@ public class Pacman extends Entity implements KeyListener, Runnable {
         isAnimation = false;
         isWalking = false;
         walkingThread = new Thread(this);
+
+        this.score = score;
     }
     @Override
     public void run(){
@@ -49,6 +54,22 @@ public class Pacman extends Entity implements KeyListener, Runnable {
                 float blockX = (float) getX()/Block.BLOCK_LENGTH, blockY = (float) getY()/Block.BLOCK_LENGTH;
                 int newX = getX(), newY = getY();
 
+                //checking if pacman gets point
+                //POMYSL CZY MOZESZ TO ZAMIENIC NA JAKAS INNA STRUKTURE
+                if(blockX % 1 == 0 && blockY % 1 == 0) {
+                    Iterator<Path> iterator = pathWithPoints.iterator();
+                    while (iterator.hasNext()) {
+                        Path path = iterator.next();
+                        if (path.getX() == this.getX() && path.getY() == this.getY()) {
+                            path.pointCollected();
+                            iterator.remove();
+                            score.addPoint();
+                            break;
+                        }
+                    }
+                }
+
+                //checking collision with ghosts
                 if(isCollision(newX, newY)){
                     isThread = false;
                     try {
@@ -62,6 +83,7 @@ public class Pacman extends Entity implements KeyListener, Runnable {
                     break;
                 }
 
+                //checking if can change direction
                 if(direction == LEFT){
                     if(!changeDirection(direction, blockX, blockY)) newX = newX - STEP;
                     changeLocation(newX, newY);

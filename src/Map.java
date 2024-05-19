@@ -12,40 +12,49 @@ public class Map extends JFrame {
     public static final char PATH = '0';
     public static final char BORDER = '1';
     private int width;
-    private int heigh;
+    private int height;
     public static List<List<Character>> map;
     private JPanel panel;
+    private JPanel scorePanel;
+    private JLabel scoreLabel;
+    private JPanel mapPanel;
     private MapMenuWindow parentWindow;
     private JLayeredPane mainPane;
 
-    private Pacman pacman;
+    protected Pacman pacman;
 
-    private final Ghost ghostRed;
-    private final Ghost ghostPink;
-    private final Ghost ghostOrange;
-    private final Ghost ghostBlue;
+    private Score score;
 
     public Map(String path, MapMenuWindow parentWindow) throws IOException {
         this.parentWindow = parentWindow;
         map = new ArrayList<>();
+        score = new Score();
         setTitle("Pacman");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.black);
 
+        Container contentPane = this.getContentPane();
+        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+
         addCloseListener();
+
+        //add score
+        loadScorePanel();
+
+        //load and add map
         loadFromFile(path);
         loadMap();
+        Entity.clearEntities();
 
         //add four ghosts
-        ghostRed = new Ghost(ColorEnum.RED);
-        ghostPink = new Ghost(ColorEnum.PINK);
-        ghostBlue = new Ghost(ColorEnum.BLUE);
-        ghostOrange = new Ghost(ColorEnum.ORANGE);
+        new Ghost(ColorEnum.RED);
+        new Ghost(ColorEnum.PINK);
+        new Ghost(ColorEnum.BLUE);
+        new Ghost(ColorEnum.ORANGE);
 
         //add pacman
-        pacman = new Pacman("src/img/pacman/pacman1.png", "src/img/pacman/pacman2.png");
+        pacman = new Pacman("src/img/pacman/pacman1.png", "src/img/pacman/pacman2.png", score);
         addKeyListener(pacman);
-
         Entity.startThreads();
 
         //add entities to mainPane
@@ -53,8 +62,23 @@ public class Map extends JFrame {
             mainPane.add(entity, JLayeredPane.POPUP_LAYER);
         }
 
+        loadLabelWithScore();
+
+        int desiredY = Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 400;
         setLocationRelativeTo(null);
+        this.setLocation(getX(), desiredY);
         this.setVisible(true);
+        this.pack();
+        this.setMinimumSize(new Dimension(mainPane.getWidth(), scorePanel.getHeight() + mainPane.getHeight()));
+    }
+
+    public void loadLabelWithScore(){
+        scoreLabel = new JLabel();
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        scoreLabel.setForeground(Color.WHITE);
+        Thread scoreThread = new Thread(new ScoreThread(scoreLabel, score));
+        scoreThread.start();
+        scorePanel.add(scoreLabel);
     }
 
     public void loadFromFile(String path) throws IOException {
@@ -80,17 +104,24 @@ public class Map extends JFrame {
     }
 
     public void loadMap(){
-        heigh = map.size();
-        width = map.get(0).size();
+        //panel for map
+        mapPanel = new JPanel();
+        mapPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mapPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        mapPanel.setBackground(Color.BLACK);
+        add(mapPanel);
 
-        this.setSize(width*Block.BLOCK_LENGTH+10, heigh*Block.BLOCK_LENGTH+Block.BLOCK_LENGTH);
+        height = map.size();
+        width = map.getFirst().size();
+
+        this.setSize(width*Block.BLOCK_LENGTH+10, height*Block.BLOCK_LENGTH+Block.BLOCK_LENGTH);
         mainPane = new JLayeredPane();
-        mainPane.setPreferredSize(new Dimension(width*Block.BLOCK_LENGTH, heigh*Block.BLOCK_LENGTH));
-        getContentPane().add(mainPane);
+        mainPane.setPreferredSize(new Dimension(width*Block.BLOCK_LENGTH, height*Block.BLOCK_LENGTH));
+        mapPanel.add(mainPane);
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(heigh, width));
-        panel.setBounds(0, 0, width*Block.BLOCK_LENGTH, heigh*Block.BLOCK_LENGTH);
+        panel.setLayout(new GridLayout(height, width));
+        panel.setBounds(0, 0, width*Block.BLOCK_LENGTH, height*Block.BLOCK_LENGTH);
 
         int x = 0;
         for(List<Character> row : map){
@@ -110,16 +141,27 @@ public class Map extends JFrame {
         mainPane.add(panel, JLayeredPane.DEFAULT_LAYER);
     }
 
+    public void loadScorePanel(){
+        scorePanel = new JPanel();
+        scorePanel.setPreferredSize(new Dimension(300, 100));
+        scorePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scorePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        scorePanel.setBackground(Color.BLACK);
+        add(scorePanel);
+    }
+
     private void addCloseListener(){
         addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
                 parentWindow.mapClosed();
                 Entity.isThread = false;
+                ScoreThread.isThread = false;
 
-                ghostOrange.setBounds(0,0,0,0);
-                ghostBlue.setBounds(0,0,0,0);
-                ghostPink.setBounds(0,0,0,0);
-                ghostRed.setBounds(0,0,0,0);
+                for(Entity ghost : Entity.ghosts){
+                    ghost.setBounds(0,0,0,0);
+                }
+
+                Block.clearPaths();
             }
         });
     }

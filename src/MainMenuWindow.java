@@ -67,7 +67,7 @@ public class MainMenuWindow extends JFrame {
         btn.setPreferredSize(new Dimension(200, 30));
         btn.setFocusable(false);
 
-        Font font = new Font("Arial", Font.BOLD, 20); // Change font family, style, and size as needed
+        Font font = new Font("Arial", Font.BOLD, 20);
         btn.setFont(font);
 
         return btn;

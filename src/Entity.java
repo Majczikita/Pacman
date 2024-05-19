@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Entity extends JLabel implements  Runnable{
-    protected static int size;
+//public abstract class Entity extends JLabel implements  Runnable{
+public abstract class Entity extends Block implements  Runnable{
     protected int direction;
     protected static boolean isThread;
 
@@ -26,8 +26,7 @@ public abstract class Entity extends JLabel implements  Runnable{
     protected Thread walkingThread;
 
     public Entity(){
-        size = Block.BLOCK_LENGTH;
-        setBounds(setStartingX(), setStartingY(), size, size);
+        setBounds(setStartingX(), setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
         isThread = true;
@@ -37,18 +36,10 @@ public abstract class Entity extends JLabel implements  Runnable{
         entities.add(this);
     }
 
-    public ImageIcon loadIcon(String path){
-        ImageIcon icon = new ImageIcon(path);
-        Image img = icon.getImage();
-        img = img.getScaledInstance(size-5, size-5, Image.SCALE_SMOOTH);
-        icon = new ImageIcon(img);
-        return icon;
-    }
-
     public static void startThreads(){
         isThread = true;
         for(Entity entity : entities){
-            entity.setBounds(entity.setStartingX(), entity.setStartingY(), size, size);
+            entity.setBounds(entity.setStartingX(), entity.setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
             entity.thread = new Thread(entity);
             entity.thread.start();
 
@@ -58,7 +49,11 @@ public abstract class Entity extends JLabel implements  Runnable{
             }
         }
     }
-
+    public static void clearEntities(){
+        if(!(entities==null) && !entities.isEmpty()){
+            entities.clear();
+        }
+    }
     public abstract int setStartingX();
     public abstract int setStartingY();
 }

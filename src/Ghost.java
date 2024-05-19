@@ -16,14 +16,19 @@ public class Ghost extends Entity implements Runnable{
 
     @Override
     public void run() {
-        setBounds(setStartingX(), setStartingY(), size, size);
+        setBounds(setStartingX(), setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
         float blockX, blockY;
         int newX, newY;
         List<Integer> availableDirections = new ArrayList<>();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         while(isThread){
-            blockX = (float) getX()/Block.BLOCK_LENGTH;
-            blockY = (float) getY()/Block.BLOCK_LENGTH;
+            blockX = (float) getX()/BLOCK_LENGTH;
+            blockY = (float) getY()/BLOCK_LENGTH;
             newX = getX();
             newY = getY();
             availableDirections.clear();
@@ -132,28 +137,28 @@ public class Ghost extends Entity implements Runnable{
 
     @Override
     public int setStartingX() {
-        if(color == ColorEnum.PINK || color == ColorEnum.RED) return (Map.map.get(0).size()/2)*Block.BLOCK_LENGTH;
-        else if (color == ColorEnum.BLUE)return (Map.map.get(0).size()/2-1)*Block.BLOCK_LENGTH;
-        else return (Map.map.get(0).size()/2+1)*Block.BLOCK_LENGTH;
+        if(color == ColorEnum.PINK || color == ColorEnum.RED) return (Map.map.get(0).size()/2)*BLOCK_LENGTH;
+        else if (color == ColorEnum.BLUE)return (Map.map.get(0).size()/2-1)*BLOCK_LENGTH;
+        else return (Map.map.get(0).size()/2+1)*BLOCK_LENGTH;
     }
 
     @Override
     public int setStartingY() {
         if(color == ColorEnum.BLUE || color == ColorEnum.ORANGE || color == ColorEnum.PINK){
             if(Map.map.size() == 17 || Map.map.size() == 19){
-                return 7 * Block.BLOCK_LENGTH;
+                return 7 * BLOCK_LENGTH;
             } else if(Map.map.size() == 21){
-                return 9 * Block.BLOCK_LENGTH;
+                return 9 * BLOCK_LENGTH;
             }else if(Map.map.size() == 20){
-                return 8 * Block.BLOCK_LENGTH;
+                return 8 * BLOCK_LENGTH;
             } else return 0;
         } else{
             if(Map.map.size() == 17 || Map.map.size() == 19){
-                return 5 * Block.BLOCK_LENGTH;
+                return 5 * BLOCK_LENGTH;
             } else if(Map.map.size() == 21){
-                return 7 * Block.BLOCK_LENGTH;
+                return 7 * BLOCK_LENGTH;
             }else if(Map.map.size() == 20){
-                return 6 * Block.BLOCK_LENGTH;
+                return 6 * BLOCK_LENGTH;
             } else return 0;
         }
 

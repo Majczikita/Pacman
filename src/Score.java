@@ -15,6 +15,11 @@ public class Score implements Serializable {
         saveScore(this);
     }
 
+    public Score(){
+        points = 0;
+        name = "";
+    }
+
     public static void addAndSort(Score score){
         if(scoreSorted.isEmpty()) {
             scoreSorted.add(score);
@@ -33,6 +38,10 @@ public class Score implements Serializable {
 
     public int getPoints() {
         return points;
+    }
+
+    public void addPoint(){
+        points++;
     }
 
     public static List<Score> getScoreSorted() {
