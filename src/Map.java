@@ -11,13 +11,8 @@ import java.util.List;
 public class Map extends JFrame {
     public static final char PATH = '0';
     public static final char BORDER = '1';
-    private int width;
-    private int height;
     public static List<List<Character>> map;
-    private JPanel panel;
     private JPanel scorePanel;
-    private JLabel scoreLabel;
-    private JPanel mapPanel;
     private MapMenuWindow parentWindow;
     private JLayeredPane mainPane;
 
@@ -63,6 +58,8 @@ public class Map extends JFrame {
         }
 
         loadLabelWithScore();
+        loadLives();
+        loadTime();
 
         int desiredY = Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 400;
         setLocationRelativeTo(null);
@@ -73,12 +70,34 @@ public class Map extends JFrame {
     }
 
     public void loadLabelWithScore(){
-        scoreLabel = new JLabel();
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        scoreLabel.setForeground(Color.WHITE);
+        JLabel scoreLabel = new JLabel();
+        editLabel(scoreLabel);
         Thread scoreThread = new Thread(new ScoreThread(scoreLabel, score));
         scoreThread.start();
         scorePanel.add(scoreLabel);
+    }
+
+    //ADD THREAD
+    public void loadLives(){
+        JLabel livesLabel = new JLabel();
+        editLabel(livesLabel);
+        livesLabel.setText("Lives: 3");
+        scorePanel.add(livesLabel);
+    }
+    //ADD THREAD
+    public void loadTime(){
+        JLabel time = new JLabel();
+        editLabel(time);
+        Thread thread = new Thread(new TimeThread(time));
+        thread.start();
+        scorePanel.add(time);
+    }
+
+    public void editLabel(JLabel lbl){
+        lbl.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lbl.setFont(new Font("Arial", Font.BOLD, 20));
+        lbl.setForeground(Color.WHITE);
     }
 
     public void loadFromFile(String path) throws IOException {
@@ -105,23 +124,23 @@ public class Map extends JFrame {
 
     public void loadMap(){
         //panel for map
-        mapPanel = new JPanel();
+        JPanel mapPanel = new JPanel();
         mapPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mapPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         mapPanel.setBackground(Color.BLACK);
         add(mapPanel);
 
-        height = map.size();
-        width = map.getFirst().size();
+        int height = map.size();
+        int width = map.getFirst().size();
 
-        this.setSize(width*Block.BLOCK_LENGTH+10, height*Block.BLOCK_LENGTH+Block.BLOCK_LENGTH);
+        this.setSize(width *Block.BLOCK_LENGTH+10, height *Block.BLOCK_LENGTH+Block.BLOCK_LENGTH);
         mainPane = new JLayeredPane();
-        mainPane.setPreferredSize(new Dimension(width*Block.BLOCK_LENGTH, height*Block.BLOCK_LENGTH));
+        mainPane.setPreferredSize(new Dimension(width *Block.BLOCK_LENGTH, height *Block.BLOCK_LENGTH));
         mapPanel.add(mainPane);
 
-        panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(height, width));
-        panel.setBounds(0, 0, width*Block.BLOCK_LENGTH, height*Block.BLOCK_LENGTH);
+        panel.setBounds(0, 0, width *Block.BLOCK_LENGTH, height *Block.BLOCK_LENGTH);
 
         int x = 0;
         for(List<Character> row : map){
@@ -143,6 +162,7 @@ public class Map extends JFrame {
 
     public void loadScorePanel(){
         scorePanel = new JPanel();
+        scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
         scorePanel.setPreferredSize(new Dimension(300, 100));
         scorePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scorePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -156,6 +176,7 @@ public class Map extends JFrame {
                 parentWindow.mapClosed();
                 Entity.isThread = false;
                 ScoreThread.isThread = false;
+                TimeThread.isThread = false;
 
                 for(Entity ghost : Entity.ghosts){
                     ghost.setBounds(0,0,0,0);
