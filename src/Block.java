@@ -7,7 +7,6 @@ public class Block extends JLabel{
     public static final int BLOCK_LENGTH = 30;
     private int x, y;
     private Color color;
-    protected boolean hasPoint;
     protected static List<Path> pathWithPoints;
 
     public Block(int x, int y, Color color){
@@ -36,5 +35,9 @@ public class Block extends JLabel{
     }
     public static void clearPaths(){
         pathWithPoints.clear();
+    }
+
+    public static List<Path> getPathWithPoints() {
+        return pathWithPoints;
     }
 }

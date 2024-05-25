@@ -72,7 +72,7 @@ public class Map extends JFrame {
     public void loadLabelWithScore(){
         JLabel scoreLabel = new JLabel();
         editLabel(scoreLabel);
-        Thread scoreThread = new Thread(new ScoreThread(scoreLabel, score));
+        Thread scoreThread = new Thread(new ScoreThread(scoreLabel, this, score));
         scoreThread.start();
         scorePanel.add(scoreLabel);
     }
@@ -84,7 +84,7 @@ public class Map extends JFrame {
         livesLabel.setText("Lives: 3");
         scorePanel.add(livesLabel);
     }
-    //ADD THREAD
+
     public void loadTime(){
         JLabel time = new JLabel();
         editLabel(time);

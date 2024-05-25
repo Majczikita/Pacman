@@ -8,6 +8,7 @@ public class Score implements Serializable {
     private static List<Score> storedData = new ArrayList<>();
     private int points;
     private String name;
+    private static boolean dataLoaded;
 
     public Score(String name, int points){
         this.name = name;
@@ -18,6 +19,7 @@ public class Score implements Serializable {
     public Score(){
         points = 0;
         name = "";
+        dataLoaded = false;
     }
 
     public static void addAndSort(Score score){
@@ -70,18 +72,19 @@ public class Score implements Serializable {
     }
 
     public static List<Score> loadAllUserData() {
-        List<Score> dataList = new ArrayList<>();
+        List<Score> list = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/score/scores.txt"))) {
             while (true) {
                 Score score = (Score) ois.readObject();
-                dataList.add(score);
+                list.add(score);
             }
         } catch (EOFException e) {
             // End of file reached
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return dataList;
+        dataLoaded = true;
+        return list;
     }
 
     public static void loadData(){
@@ -91,7 +94,7 @@ public class Score implements Serializable {
     }
 
     private static void saveAllUserData(List<Score> dataList) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/scores.txt"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/score/scores.txt"))) {
             for (Score score : dataList) {
                 oos.writeObject(score);
             }
@@ -104,5 +107,12 @@ public class Score implements Serializable {
         for(Score s : scoreSorted){
             scoreSorted.remove(s);
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public static boolean getDataLoaded(){
+        return dataLoaded;
     }
 }

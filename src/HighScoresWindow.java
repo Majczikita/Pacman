@@ -21,16 +21,20 @@ public class HighScoresWindow extends JFrame{
         this.setVisible(true);
     }
 
-    private void launchHighScores() throws Exception {
+    private void launchHighScores(){
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JScrollPane scroll = new JScrollPane();
 
         //Score.scoreReset();
-        Score.loadData();
+        if(!Score.getDataLoaded())
+            Score.loadData();
+
         Vector<String> testVector = new Vector<>(Score.listToString());
         HighScoresList listModel = new HighScoresList(testVector);
+
+        System.out.println(Score.listToString());
 
         JList jList = new JList(testVector);
         jList.setModel(listModel);
