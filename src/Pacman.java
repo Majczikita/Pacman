@@ -12,19 +12,25 @@ public class Pacman extends Entity implements KeyListener, Runnable {
     private int savedDirection;
     private boolean isAnimation;
     private boolean isWalking;
+    private int lives;
 
-    private Score score;
+    private final Map parentWindow;
+    private JLabel livesLabel;
+    public static int pointsCollected;
 
-    public Pacman(String path1, String path2, Score score){
+    public Pacman(String path1, String path2, JLabel livesLabel, Map parentWindow){
         icon1 = loadIcon(path1);
         icon2 = loadIcon(path2);
+        this.parentWindow = parentWindow;
+        pointsCollected = 0;
+        lives = 3;
         direction = RIGHT;
         savedDirection = NULL;
         isAnimation = false;
         isWalking = false;
         walkingThread = new Thread(this);
-
-        this.score = score;
+        this.livesLabel = livesLabel;
+        this.livesLabel.setText("Lives: " + lives);
     }
     @Override
     public void run(){
@@ -55,7 +61,6 @@ public class Pacman extends Entity implements KeyListener, Runnable {
                 int newX = getX(), newY = getY();
 
                 //checking if pacman gets point
-                //POMYSL CZY MOZESZ TO ZAMIENIC NA JAKAS INNA STRUKTURE
                 if(blockX % 1 == 0 && blockY % 1 == 0) {
                     Iterator<Path> iterator = pathWithPoints.iterator();
                     while (iterator.hasNext()) {
@@ -63,7 +68,7 @@ public class Pacman extends Entity implements KeyListener, Runnable {
                         if (path.getX() == this.getX() && path.getY() == this.getY()) {
                             path.pointCollected();
                             iterator.remove();
-                            score.addPoint();
+                            pointsCollected++;
                             break;
                         }
                     }
@@ -79,11 +84,16 @@ public class Pacman extends Entity implements KeyListener, Runnable {
                     }
                     isAnimation = false;
                     isWalking = false;
+                    lives--;
+                    if(lives == 0){
+                        GameHandler.endGame(parentWindow);
+                    }
+                    this.livesLabel.setText("Lives: " + lives);
                     startThreads();
                     break;
                 }
 
-                //checking if can change direction
+                //checking if pacman can change direction
                 if(direction == LEFT){
                     if(!changeDirection(direction, blockX, blockY)) newX = newX - STEP;
                     changeLocation(newX, newY);
@@ -108,6 +118,7 @@ public class Pacman extends Entity implements KeyListener, Runnable {
             }
         }
     }
+
     public boolean isCollision(float x, float y){
         for(Entity ghost : ghosts){
             //checking collision in range because of multi-threading

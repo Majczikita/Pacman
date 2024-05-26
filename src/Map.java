@@ -12,18 +12,15 @@ public class Map extends JFrame {
     public static final char PATH = '0';
     public static final char BORDER = '1';
     public static List<List<Character>> map;
-    private JPanel scorePanel;
-    private MapMenuWindow parentWindow;
+    private static JPanel scorePanel;
+    private final MapMenuWindow parentWindow;
     private JLayeredPane mainPane;
 
     protected Pacman pacman;
 
-    private Score score;
-
     public Map(String path, MapMenuWindow parentWindow) throws IOException {
         this.parentWindow = parentWindow;
         map = new ArrayList<>();
-        score = new Score();
         setTitle("Pacman");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.black);
@@ -41,6 +38,10 @@ public class Map extends JFrame {
         loadMap();
         Entity.clearEntities();
 
+        loadScore();
+        JLabel livesLabel = loadLives();
+        loadTime();
+
         //add four ghosts
         new Ghost(ColorEnum.RED);
         new Ghost(ColorEnum.PINK);
@@ -48,7 +49,7 @@ public class Map extends JFrame {
         new Ghost(ColorEnum.ORANGE);
 
         //add pacman
-        pacman = new Pacman("src/img/pacman/pacman1.png", "src/img/pacman/pacman2.png", score);
+        pacman = new Pacman("src/img/pacman/pacman1.png", "src/img/pacman/pacman2.png", livesLabel, this);
         addKeyListener(pacman);
         Entity.startThreads();
 
@@ -56,10 +57,6 @@ public class Map extends JFrame {
         for(Entity entity : Entity.entities){
             mainPane.add(entity, JLayeredPane.POPUP_LAYER);
         }
-
-        loadLabelWithScore();
-        loadLives();
-        loadTime();
 
         int desiredY = Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 400;
         setLocationRelativeTo(null);
@@ -69,20 +66,19 @@ public class Map extends JFrame {
         this.setMinimumSize(new Dimension(mainPane.getWidth(), scorePanel.getHeight() + mainPane.getHeight()));
     }
 
-    public void loadLabelWithScore(){
+    public void loadScore(){
         JLabel scoreLabel = new JLabel();
         editLabel(scoreLabel);
-        Thread scoreThread = new Thread(new ScoreThread(scoreLabel, this, score));
+        Thread scoreThread = new Thread(new ScoreThread(scoreLabel, this));
         scoreThread.start();
         scorePanel.add(scoreLabel);
     }
 
-    //ADD THREAD
-    public void loadLives(){
+    public JLabel loadLives(){
         JLabel livesLabel = new JLabel();
         editLabel(livesLabel);
-        livesLabel.setText("Lives: 3");
         scorePanel.add(livesLabel);
+        return livesLabel;
     }
 
     public void loadTime(){
@@ -163,7 +159,7 @@ public class Map extends JFrame {
     public void loadScorePanel(){
         scorePanel = new JPanel();
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
-        scorePanel.setPreferredSize(new Dimension(300, 100));
+        scorePanel.setPreferredSize(new Dimension(400, 100));
         scorePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scorePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         scorePanel.setBackground(Color.BLACK);

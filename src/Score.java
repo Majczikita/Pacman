@@ -16,12 +16,6 @@ public class Score implements Serializable {
         saveScore(this);
     }
 
-    public Score(){
-        points = 0;
-        name = "";
-        dataLoaded = false;
-    }
-
     public static void addAndSort(Score score){
         if(scoreSorted.isEmpty()) {
             scoreSorted.add(score);
@@ -40,14 +34,6 @@ public class Score implements Serializable {
 
     public int getPoints() {
         return points;
-    }
-
-    public void addPoint(){
-        points++;
-    }
-
-    public static List<Score> getScoreSorted() {
-        return scoreSorted;
     }
 
     @Override
@@ -101,16 +87,6 @@ public class Score implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void scoreReset(){
-        for(Score s : scoreSorted){
-            scoreSorted.remove(s);
-        }
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
     public static boolean getDataLoaded(){
         return dataLoaded;
