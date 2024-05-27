@@ -14,7 +14,7 @@ public class Map extends JFrame {
     public static List<List<Character>> map;
     private static JPanel scorePanel;
     private final MapMenuWindow parentWindow;
-    private JLayeredPane mainPane;
+    private static JLayeredPane mainPane;
 
     protected Pacman pacman;
 
@@ -164,6 +164,11 @@ public class Map extends JFrame {
         scorePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         scorePanel.setBackground(Color.BLACK);
         add(scorePanel);
+    }
+
+    public static void addBonus(Bonus bonus){
+        mainPane.add(bonus, JLayeredPane.POPUP_LAYER);
+        System.out.println("Bonus added");
     }
 
     private void addCloseListener(){

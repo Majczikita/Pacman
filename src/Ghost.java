@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,7 +13,17 @@ public class Ghost extends Entity implements Runnable{
         startingConfig();
         setIcon(loadIcon(pathR));
         ghosts.add(this);
+        Thread bonus = new Thread(new BonusThread(this));
+        bonus.start();
     }
+//    public Ghost(ColorEnum colorEnum, JLayeredPane pane, Integer depth){
+//        this.color = colorEnum;
+//        startingConfig();
+//        setIcon(loadIcon(pathR));
+//        ghosts.add(this);
+//        Thread bonus = new Thread(new BonusThread(this, pane, depth));
+//        bonus.start();
+//    }
 
     @Override
     public void run() {

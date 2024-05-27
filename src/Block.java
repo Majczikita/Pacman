@@ -11,18 +11,25 @@ public class Block extends JLabel{
 
     public Block(int x, int y, Color color){
         setOpaque(true);
-        this.x = x;
-        this.y = y;
+        this.x = x*BLOCK_LENGTH;
+        this.y = y*BLOCK_LENGTH;
         this.color = color;
         editBlock();
         if(pathWithPoints==null) pathWithPoints = new ArrayList<>();
+    }
+    public Block(int x, int y){
+        setOpaque(false);
+        this.x = x;
+        this.y = y;
+        this.color = null;
+        editBlock();
     }
 
     public Block(){}
 
     public void editBlock(){
         setPreferredSize(new Dimension(BLOCK_LENGTH, BLOCK_LENGTH));
-        setBounds(x*BLOCK_LENGTH, y*BLOCK_LENGTH, BLOCK_LENGTH, BLOCK_LENGTH);
+        setBounds(x, y, BLOCK_LENGTH, BLOCK_LENGTH);
         setBackground(color);
         setVisible(true);
     }
