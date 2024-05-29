@@ -1,9 +1,14 @@
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class GameHandler {
+    private static final List<Thread> entityThreads = new ArrayList<>();
+    protected static boolean runEntityThread;
+
     public static void endGame(JFrame frameToClose){
         ScoreThread.isThread = false;
-        Entity.isThread = false;
+        runEntityThread = false;
         TimeThread.isThread = false;
         frameToClose.dispose();
 
@@ -14,5 +19,19 @@ public abstract class GameHandler {
                 JOptionPane.PLAIN_MESSAGE);
         if (s != null && !s.isEmpty())
             new Score(s, Pacman.pointsCollected);
+    }
+
+    public void addEntityThread(Thread thread){
+        entityThreads.add(thread);
+    }
+
+    public static void startEntityThreads(){
+        runEntityThread = true;
+        for(Thread thread : entityThreads){
+            thread.start();
+        }
+    }
+    public static void endEntityThreads(){
+        runEntityThread = false;
     }
 }

@@ -4,11 +4,8 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//public abstract class Entity extends JLabel implements  Runnable{
-public abstract class Entity extends Block implements  Runnable{
+public abstract class Entity extends Block {
     protected int direction;
-    protected static boolean isThread;
 
     protected static final int UP = 180;
     protected static final int RIGHT = 90;
@@ -22,37 +19,24 @@ public abstract class Entity extends Block implements  Runnable{
 
     protected static List<Entity> ghosts;
     protected static List<Entity> entities;
-    protected Thread thread;
-    protected Thread walkingThread;
+
 
     public Entity(){
         setBounds(setStartingX(), setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
-        isThread = true;
-        thread = new Thread(this);
         if(ghosts==null) ghosts = new ArrayList<>();
         if(entities==null) entities = new ArrayList<>();
         entities.add(this);
     }
 
-    public static void startThreads(){
-        isThread = true;
-        for(Entity entity : entities){
-            entity.setBounds(entity.setStartingX(), entity.setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
-            entity.thread = new Thread(entity);
-            entity.thread.start();
-
-            if(entity instanceof KeyListener){
-                entity.walkingThread = new Thread(entity);
-                entity.walkingThread.start();
-            }
-        }
-    }
     public static void clearEntities(){
         if(!(entities==null) && !entities.isEmpty()){
             entities.clear();
         }
+    }
+    public void setStartingPosition(){
+        this.setBounds(this.setStartingX(), this.setStartingY(), Block.BLOCK_LENGTH, Block.BLOCK_LENGTH);
     }
     public abstract int setStartingX();
     public abstract int setStartingY();

@@ -6,117 +6,26 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
-public class Pacman extends Entity implements KeyListener, Runnable {
+public class Pacman extends Entity implements KeyListener {
     private ImageIcon icon1;
     private ImageIcon icon2;
     private int savedDirection;
-    private boolean isAnimation;
-    private boolean isWalking;
     private int lives;
 
-    private final Map parentWindow;
+    private Map parentWindow;
     private JLabel livesLabel;
     public static int pointsCollected;
 
-    public Pacman(String path1, String path2, JLabel livesLabel, Map parentWindow){
-        icon1 = loadIcon(path1);
-        icon2 = loadIcon(path2);
+    public Pacman(JLabel livesLabel, Map parentWindow){
         this.parentWindow = parentWindow;
         pointsCollected = 0;
         lives = 3;
         direction = RIGHT;
         savedDirection = NULL;
-        isAnimation = false;
-        isWalking = false;
-        walkingThread = new Thread(this);
         this.livesLabel = livesLabel;
         this.livesLabel.setText("Lives: " + lives);
-    }
-    @Override
-    public void run(){
-        //ANIMATION THREAD
-        if(!isAnimation){
-            isAnimation = true;
-            while(isThread) {
-                setIcon(icon1);
-                try {
-                    Thread.sleep(70);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                setIcon(icon2);
-                try {
-                    Thread.sleep(70);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        //WALKING THREAD
-        if(isAnimation && !isWalking){
-            isWalking = true;
-            while(isThread){
-                float blockX = (float) getX()/Block.BLOCK_LENGTH, blockY = (float) getY()/Block.BLOCK_LENGTH;
-                int newX = getX(), newY = getY();
-
-                //checking if pacman gets point
-                if(blockX % 1 == 0 && blockY % 1 == 0) {
-                    Iterator<Path> iterator = pathWithPoints.iterator();
-                    while (iterator.hasNext()) {
-                        Path path = iterator.next();
-                        if (path.getX() == this.getX() && path.getY() == this.getY()) {
-                            path.pointCollected();
-                            iterator.remove();
-                            pointsCollected++;
-                            break;
-                        }
-                    }
-                }
-
-                //checking collision with ghosts
-                if(isCollision(newX, newY)){
-                    isThread = false;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    isAnimation = false;
-                    isWalking = false;
-                    lives--;
-                    if(lives == 0){
-                        GameHandler.endGame(parentWindow);
-                    }
-                    this.livesLabel.setText("Lives: " + lives);
-                    startThreads();
-                    break;
-                }
-
-                //checking if pacman can change direction
-                if(direction == LEFT){
-                    if(!changeDirection(direction, blockX, blockY)) newX = newX - STEP;
-                    changeLocation(newX, newY);
-
-                } else if(direction == RIGHT){
-                    if(!changeDirection(direction, blockX, blockY)) newX = newX + STEP;
-                    changeLocation(newX, newY);
-
-                } else if(direction == UP){
-                    if(!changeDirection(direction, blockX, blockY)) newY = newY - STEP;
-                    changeLocation(newX, newY);
-
-                } else if(direction == DOWN){
-                    if(!changeDirection(direction, blockX, blockY)) newY = newY + STEP;
-                    changeLocation(newX, newY);
-                }
-                try {
-                    Thread.sleep(WAIT_TIME);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+        new PacmanAnimationThread(this);
+        new PacmanWalkingThread(this);
     }
 
     public boolean isCollision(float x, float y){
@@ -248,6 +157,32 @@ public class Pacman extends Entity implements KeyListener, Runnable {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    public int getLives() {
+        return lives;
+    }
+    public void die(){
+        lives--;
+    }
+
+    public JLabel getLivesLabel() {
+        return livesLabel;
+    }
+
+    public Map getParentWindow() {
+        return parentWindow;
+    }
+    public void addPoint(){
+        pointsCollected++;
+    }
+
+    public void setIcon1(ImageIcon icon) {
+        this.icon1 = icon;
+    }
+
+    public void setIcon2(ImageIcon icon) {
+        this.icon2 = icon;
     }
 
     public void changeIconDirection(int prev, int current){

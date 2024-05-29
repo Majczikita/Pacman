@@ -1,16 +1,17 @@
 
 import java.util.Random;
-public class BonusThread implements Runnable{
+public class BonusThread extends GameHandler implements Runnable{
     private final static int WAIT_TIME = 5000;
     private final Ghost ghost;
 
     public BonusThread(Ghost ghost) {
         this.ghost = ghost;
+        addEntityThread(new Thread(this));
     }
 
     @Override
     public void run() {
-        while (Entity.isThread){
+        while (runEntityThread){
             try {
                 Thread.sleep(WAIT_TIME);
             } catch (InterruptedException e) {

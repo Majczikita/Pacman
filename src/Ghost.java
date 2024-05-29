@@ -1,9 +1,7 @@
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Ghost extends Entity implements Runnable{
+public class Ghost extends Entity {
     private String pathR, pathU, pathL, pathD;
     private String mainPath = "src/img";
     private final ColorEnum color;
@@ -13,79 +11,10 @@ public class Ghost extends Entity implements Runnable{
         startingConfig();
         setIcon(loadIcon(pathR));
         ghosts.add(this);
-        Thread bonus = new Thread(new BonusThread(this));
-        bonus.start();
+        new BonusThread(this);
+        new GhostWalkingThread(this);
     }
-//    public Ghost(ColorEnum colorEnum, JLayeredPane pane, Integer depth){
-//        this.color = colorEnum;
-//        startingConfig();
-//        setIcon(loadIcon(pathR));
-//        ghosts.add(this);
-//        Thread bonus = new Thread(new BonusThread(this, pane, depth));
-//        bonus.start();
-//    }
 
-    @Override
-    public void run() {
-        setBounds(setStartingX(), setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
-        float blockX, blockY;
-        int newX, newY;
-        List<Integer> availableDirections = new ArrayList<>();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        while(isThread){
-            blockX = (float) getX()/BLOCK_LENGTH;
-            blockY = (float) getY()/BLOCK_LENGTH;
-            newX = getX();
-            newY = getY();
-            availableDirections.clear();
-            switchIcon();
-
-            if(direction == RIGHT){
-                if(blockX%1==0 && blockY%1==0){
-                    if(canTurn(UP, (int)blockX, (int)blockY)) availableDirections.add(UP);
-                    if(canTurn(DOWN, (int)blockX, (int)blockY)) availableDirections.add(DOWN);
-                    if(canTurn(RIGHT, (int)blockX, (int)blockY)) availableDirections.add(RIGHT);
-
-                    direction = makeStep(newX, newY, availableDirections, LEFT);
-                } else setLocation(newX + STEP, newY);
-            } else if(direction == DOWN){
-                if(blockX%1==0 && blockY%1==0){
-                    if(canTurn(LEFT, (int)blockX, (int)blockY)) availableDirections.add(LEFT);
-                    if(canTurn(DOWN, (int)blockX, (int)blockY)) availableDirections.add(DOWN);
-                    if(canTurn(RIGHT, (int)blockX, (int)blockY)) availableDirections.add(RIGHT);
-
-                    direction = makeStep(newX, newY, availableDirections, UP);
-                } else setLocation(newX, newY + STEP);
-            } else if(direction == LEFT){
-                if(blockX%1==0 && blockY%1==0){
-                    if(canTurn(LEFT, (int)blockX, (int)blockY)) availableDirections.add(LEFT);
-                    if(canTurn(DOWN, (int)blockX, (int)blockY)) availableDirections.add(DOWN);
-                    if(canTurn(UP, (int)blockX, (int)blockY)) availableDirections.add(UP);
-
-                    direction = makeStep(newX, newY, availableDirections, RIGHT);
-                } else setLocation(newX - STEP, newY);
-            } else if(direction == UP){
-                if(blockX%1==0 && blockY%1==0){
-                    if(canTurn(LEFT, (int)blockX, (int)blockY)) availableDirections.add(LEFT);
-                    if(canTurn(UP, (int)blockX, (int)blockY)) availableDirections.add(UP);
-                    if(canTurn(RIGHT, (int)blockX, (int)blockY)) availableDirections.add(RIGHT);
-
-                    direction = makeStep(newX, newY, availableDirections, DOWN);
-                } else setLocation(newX, newY - STEP);
-            }
-
-            try {
-                Thread.sleep(WAIT_TIME);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
     public boolean canTurn(int direction, int x, int y){
         return switch (direction) {
             case UP -> (Map.map.get(y - 1).get(x) == Map.PATH);

@@ -49,9 +49,9 @@ public class Map extends JFrame {
         new Ghost(ColorEnum.ORANGE);
 
         //add pacman
-        pacman = new Pacman("src/img/pacman/pacman1.png", "src/img/pacman/pacman2.png", livesLabel, this);
+        pacman = new Pacman(livesLabel, this);
         addKeyListener(pacman);
-        Entity.startThreads();
+        GameHandler.startEntityThreads();
 
         //add entities to mainPane
         for(Entity entity : Entity.entities){
@@ -175,7 +175,7 @@ public class Map extends JFrame {
         addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
                 parentWindow.mapClosed();
-                Entity.isThread = false;
+                GameHandler.endEntityThreads();
                 ScoreThread.isThread = false;
                 TimeThread.isThread = false;
 
