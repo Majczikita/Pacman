@@ -181,8 +181,16 @@ public class Pacman extends Entity implements KeyListener {
         this.icon1 = icon;
     }
 
+    public ImageIcon getIcon1() {
+        return icon1;
+    }
+
     public void setIcon2(ImageIcon icon) {
         this.icon2 = icon;
+    }
+
+    public ImageIcon getIcon2() {
+        return icon2;
     }
 
     public void changeIconDirection(int prev, int current){

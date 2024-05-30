@@ -4,8 +4,10 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
     private final Pacman pacman;
 
     public PacmanWalkingThread(Pacman pacman) {
-        addEntityThread(new Thread(this));
         this.pacman = pacman;
+
+        addEntityThread(this);
+        addThread(this);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
                 if(pacman.getLives() == 0){
                     GameHandler.endGame(pacman.getParentWindow());
                 }
-                pacman.getLivesLabel().setText("pacman: " + pacman.getLives());
+                pacman.getLivesLabel().setText("Lives: " + pacman.getLives());
 
                 startEntityThreads();
                 break;

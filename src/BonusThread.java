@@ -6,16 +6,22 @@ public class BonusThread extends GameHandler implements Runnable{
 
     public BonusThread(Ghost ghost) {
         this.ghost = ghost;
-        addEntityThread(new Thread(this));
+        addEntityThread(this);
+        addThread(this);
     }
 
     @Override
     public void run() {
-        while (runEntityThread){
-            try {
-                Thread.sleep(WAIT_TIME);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        FIRST: while (runEntityThread){
+            for(int i = 0; i<WAIT_TIME/1000; i++){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if(!runEntityThread){
+                    break FIRST;
+                }
             }
             Random random = new Random();
             int number = random.nextInt(3); // 0 - 3

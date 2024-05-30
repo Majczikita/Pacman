@@ -1,22 +1,22 @@
 import javax.swing.*;
 
-public class TimeThread implements Runnable{
+public class TimeThread extends GameHandler implements Runnable{
     private int seconds, minutes;
     private final JLabel label;
-    public static boolean isThread;
 
     TimeThread(JLabel label){
         this.label = label;
         seconds = 0;
         minutes = 0;
-        isThread = true;
+        addThread(this);
+        //addThread(new Thread(this));
     }
 
     @Override
     public void run() {
         String txt = "0:00";
         label.setText(txt);
-        while (isThread) {
+        while (GameHandler.runThread) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

@@ -51,7 +51,7 @@ public class Map extends JFrame {
         //add pacman
         pacman = new Pacman(livesLabel, this);
         addKeyListener(pacman);
-        GameHandler.startEntityThreads();
+        GameHandler.startGame();
 
         //add entities to mainPane
         for(Entity entity : Entity.entities){
@@ -175,15 +175,11 @@ public class Map extends JFrame {
         addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
                 parentWindow.mapClosed();
-                GameHandler.endEntityThreads();
-                ScoreThread.isThread = false;
-                TimeThread.isThread = false;
-
                 for(Entity ghost : Entity.ghosts){
                     ghost.setBounds(0,0,0,0);
                 }
-
                 Block.clearPaths();
+                GameHandler.endGame();
             }
         });
     }

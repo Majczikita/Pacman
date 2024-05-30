@@ -1,18 +1,19 @@
 import javax.swing.*;
 
-public class ScoreThread implements Runnable {
+public class ScoreThread extends GameHandler implements Runnable {
     private final JLabel label;
     private final JFrame mapFrame;
-    public static boolean isThread;
 
     public ScoreThread(JLabel label, JFrame mapFrame){
         this.label = label;
         this.mapFrame = mapFrame;
-        isThread = true;
+
+        addThread(this);
+        //addThread(new Thread(this));
     }
     @Override
     public void run() {
-        while (isThread) {
+        while (GameHandler.runThread) {
             label.setText("Score: " + Pacman.pointsCollected);
             if(Block.getPathWithPoints().isEmpty()){
                 GameHandler.endGame(mapFrame);
