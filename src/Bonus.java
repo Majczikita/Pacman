@@ -1,9 +1,10 @@
-import java.awt.*;
 import java.util.Random;
 
 public class Bonus extends Block{
-    private static final int secodns = 5;
+    private static final int seconds = 5;
     private BonusType type;
+    private static PointsValueThread pointsValueThread;
+    private static Thread activeThread;
 
     public Bonus(int x, int y){
         super(x, y);
@@ -24,19 +25,39 @@ public class Bonus extends Block{
         }
     }
 
-    public void collected(){
+    public void collected() {
         setIcon(null);
         if(type == BonusType.ghostsBackToStart){
             ghostsBackToStart();
         }
+        else if(type == BonusType.doublePoint){
+            doublePoints();
+        }
+        else if(type == BonusType.triplePoints){
+            triplePoints();
+        }
     }
 
-    public BonusType getType() {
-        return type;
-    }
     public void ghostsBackToStart(){
         for(Entity ghost : ghosts){
             ghost.setBounds(ghost.setStartingX(), ghost.setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
         }
+    }
+    public void doublePoints() {
+        if(pointsValueThread!=null){
+            pointsValueThread.stop();
+        }
+        pointsValueThread = new PointsValueThread(seconds, activeThread, 2);
+        activeThread = new Thread(pointsValueThread);
+        activeThread.start();
+    }
+
+    public void triplePoints(){
+        if(pointsValueThread!=null){
+            pointsValueThread.stop();
+        }
+        pointsValueThread = new PointsValueThread(seconds, activeThread, 3);
+        activeThread = new Thread(pointsValueThread);
+        activeThread.start();
     }
 }

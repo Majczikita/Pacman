@@ -74,13 +74,4 @@ public abstract class GameHandler {
     public static void endEntityThreads(){
         runEntityThread = false;
     }
-    public static void endThreads(){
-        runThread = false;
-    }
-    public static void clearEntityThreads(){
-        entityThreads.clear();
-    }
-    public static void clearThreads(){
-        allThreads.clear();
-    }
 }

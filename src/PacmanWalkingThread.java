@@ -39,7 +39,6 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
                 if (bonus.getX() == this.pacman.getX() && bonus.getY() == this.pacman.getY()) {
                     bonus.collected();
                     iteratorBonuses.remove();
-                    System.out.println("Bonus " + bonus.getType() + " collected");
                     break;
                 }
             }

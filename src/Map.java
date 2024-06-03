@@ -168,7 +168,6 @@ public class Map extends JFrame {
 
     public static void addBonus(Bonus bonus){
         mainPane.add(bonus, JLayeredPane.POPUP_LAYER);
-        System.out.println("Bonus added");
     }
 
     private void addCloseListener(){
