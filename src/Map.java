@@ -179,7 +179,9 @@ public class Map extends JFrame {
                     ghost.setBounds(0,0,0,0);
                 }
                 Block.clearPaths();
-                GameHandler.endGame();
+                //TO DO TESTU - NIE DZIALA XD
+                if(GameHandler.gameOn)
+                    GameHandler.endGame();
             }
         });
     }

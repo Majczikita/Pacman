@@ -12,6 +12,7 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
 
     @Override
     public void run() {
+        Iterator<Bonus> iteratorBonuses;
         pacman.setStartingPosition();
         while(GameHandler.runEntityThread){
             float blockX = (float) pacman.getX()/Block.BLOCK_LENGTH, blockY = (float) pacman.getY()/Block.BLOCK_LENGTH;
@@ -30,7 +31,18 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
                     }
                 }
             }
+
             //checking if pacman gets a bonus
+            iteratorBonuses = Block.bonuses.iterator();
+            while (iteratorBonuses.hasNext()) {
+                Bonus bonus = iteratorBonuses.next();
+                if (bonus.getX() == this.pacman.getX() && bonus.getY() == this.pacman.getY()) {
+                    bonus.collected();
+                    iteratorBonuses.remove();
+                    System.out.println("Bonus " + bonus.getType() + " collected");
+                    break;
+                }
+            }
 
             //checking collision with ghosts
             if(pacman.isCollision(newX, newY)){

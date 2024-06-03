@@ -10,7 +10,7 @@ public class MapMenuWindow extends JFrame {
     private Map map;
     private JButton btnMap1, btnMap2, btnMap3, btnMap4, btnMap5;
 
-    MapMenuWindow(MainMenuWindow parentWindow) throws Exception {
+    MapMenuWindow(MainMenuWindow parentWindow) {
         this.parentWindow = parentWindow;
         setTitle("Choose a map");
         this.setSize(500,500);
@@ -79,8 +79,7 @@ public class MapMenuWindow extends JFrame {
         btn.setPreferredSize(new Dimension(200, 30));
         btn.setFocusable(false);
 
-        Font font = new Font("Arial", Font.BOLD, 20);
-        btn.setFont(font);
+        btn.setFont(GameHandler.MAIN_FONT);
 
         return btn;
     }

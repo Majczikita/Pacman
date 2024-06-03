@@ -5,9 +5,13 @@ import java.util.List;
 
 public class Block extends JLabel{
     public static final int BLOCK_LENGTH = 30;
+    public static int POINT_VALUE = 1;
     private int x, y;
     private Color color;
     protected static List<Path> pathWithPoints;
+    protected static List<Bonus> bonuses;
+    protected static List<Entity> ghosts;
+    protected static List<Entity> entities;
 
     public Block(int x, int y, Color color){
         setOpaque(true);
@@ -16,6 +20,7 @@ public class Block extends JLabel{
         this.color = color;
         editBlock();
         if(pathWithPoints==null) pathWithPoints = new ArrayList<>();
+        if(bonuses==null) bonuses = new ArrayList<>();
     }
     public Block(int x, int y){
         setOpaque(false);
@@ -42,6 +47,9 @@ public class Block extends JLabel{
     }
     public static void clearPaths(){
         pathWithPoints.clear();
+    }
+    public static void clearBonuses(){
+        bonuses.clear();
     }
 
     public static List<Path> getPathWithPoints() {

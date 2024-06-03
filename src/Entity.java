@@ -1,6 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +14,6 @@ public abstract class Entity extends Block {
 
     protected static final int STEP = 5;
     protected static final int WAIT_TIME = 40;
-
-    protected static List<Entity> ghosts;
-    protected static List<Entity> entities;
 
 
     public Entity(){

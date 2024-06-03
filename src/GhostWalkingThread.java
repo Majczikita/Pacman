@@ -6,12 +6,8 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
 
     public GhostWalkingThread(Ghost ghost) {
         this.ghost = ghost;
-
         addEntityThread(this);
         addThread(this);
-//        Thread ghostWalkingThread = new Thread(this);
-//        addEntityThread(ghostWalkingThread);
-//        addThread(ghostWalkingThread);
     }
 
     @Override
@@ -27,7 +23,6 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
         }
 
         while(GameHandler.runEntityThread){
-            //System.out.println(Thread.activeCount());
             blockX = (float) ghost.getX()/Block.BLOCK_LENGTH;
             blockY = (float) ghost.getY()/Block.BLOCK_LENGTH;
             newX = ghost.getX();

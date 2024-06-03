@@ -9,7 +9,6 @@ public class ScoreThread extends GameHandler implements Runnable {
         this.mapFrame = mapFrame;
 
         addThread(this);
-        //addThread(new Thread(this));
     }
     @Override
     public void run() {

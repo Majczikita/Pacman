@@ -12,7 +12,7 @@ public class BonusThread extends GameHandler implements Runnable{
 
     @Override
     public void run() {
-        FIRST: while (runEntityThread){
+        while (runEntityThread){
             for(int i = 0; i<WAIT_TIME/1000; i++){
                 try {
                     Thread.sleep(1000);
@@ -20,7 +20,7 @@ public class BonusThread extends GameHandler implements Runnable{
                     throw new RuntimeException(e);
                 }
                 if(!runEntityThread){
-                    break FIRST;
+                    return;
                 }
             }
             Random random = new Random();

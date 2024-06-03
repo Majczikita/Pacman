@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.util.Vector;
 
-public class HighScoresList extends AbstractListModel {
+public class HighScoresList extends AbstractListModel<String> {
     Vector<String> namesScores;
 
     public HighScoresList(Vector<String> namesScores){
@@ -13,7 +13,7 @@ public class HighScoresList extends AbstractListModel {
     }
 
     @Override
-    public Object getElementAt(int index) {
+    public String getElementAt(int index) {
         return namesScores.get(index);
     }
 

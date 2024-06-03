@@ -67,8 +67,7 @@ public class MainMenuWindow extends JFrame {
         btn.setPreferredSize(new Dimension(200, 30));
         btn.setFocusable(false);
 
-        Font font = new Font("Arial", Font.BOLD, 20);
-        btn.setFont(font);
+        btn.setFont(GameHandler.MAIN_FONT);
 
         return btn;
     }
@@ -114,7 +113,7 @@ public class MainMenuWindow extends JFrame {
             }
         });
     }
-    private void openMapMenuWindow() throws Exception {
+    private void openMapMenuWindow() {
         if (mapMenuWindow == null) {
             mapMenuWindow = new MapMenuWindow(this);
             mapMenuWindow.setVisible(true);
@@ -129,9 +128,7 @@ public class MainMenuWindow extends JFrame {
         highScores = null;
     }
     public void mapMenuClosed() {
-        if(openFrames.contains(mapMenuWindow.getMap())){
-            btnNewGame.setEnabled(false);
-        }
+        btnNewGame.setEnabled(!openFrames.contains(mapMenuWindow.getMap()));
         openFrames.remove(mapMenuWindow);
         mapMenuWindow = null;
     }

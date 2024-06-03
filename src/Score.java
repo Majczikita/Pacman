@@ -5,7 +5,6 @@ import java.util.List;
 public class Score implements Serializable {
     private static final long serialVersionUID = -7980315813535367733L;
     private static List<Score> scoreSorted = new ArrayList<>();
-    private static List<Score> storedData = new ArrayList<>();
     private int points;
     private String name;
     private static boolean dataLoaded;
@@ -22,7 +21,8 @@ public class Score implements Serializable {
             return;
         }
         int counter = 0;
-        for(Score s : scoreSorted){
+        List<Score> temp = scoreSorted;
+        for(Score s : temp){
             if(s.getPoints()<score.points){
                 scoreSorted.add(counter, score);
                 return;
@@ -49,12 +49,8 @@ public class Score implements Serializable {
     }
 
     public static void saveScore(Score score) {
-        storedData = loadAllUserData();
-        storedData.add(score);
-        for(Score s : storedData){
-            addAndSort(s);
-        }
-        saveAllUserData(storedData);
+        addAndSort(score);
+        saveAllUserData(scoreSorted);
     }
 
     public static List<Score> loadAllUserData() {

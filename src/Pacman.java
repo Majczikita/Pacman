@@ -174,7 +174,7 @@ public class Pacman extends Entity implements KeyListener {
         return parentWindow;
     }
     public void addPoint(){
-        pointsCollected++;
+        pointsCollected+=POINT_VALUE;
     }
 
     public void setIcon1(ImageIcon icon) {

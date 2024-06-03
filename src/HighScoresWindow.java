@@ -7,7 +7,7 @@ import java.util.Vector;
 public class HighScoresWindow extends JFrame{
     private MainMenuWindow parentWindow;
 
-    HighScoresWindow(MainMenuWindow parentWindow) throws Exception {
+    HighScoresWindow(MainMenuWindow parentWindow) {
         this.parentWindow = parentWindow;
         setTitle("High Scores");
         this.setSize(500,500);
@@ -33,9 +33,14 @@ public class HighScoresWindow extends JFrame{
         HighScoresList listModel = new HighScoresList(testVector);
 
         JList jList = new JList(testVector);
+        jList.setFont(GameHandler.MAIN_FONT);
+        jList.setForeground(Color.WHITE);
+        jList.setBackground(Color.black);
+        jList.setFixedCellHeight(GameHandler.MAIN_FONT.getSize()*2);
         jList.setModel(listModel);
 
         JScrollPane scroll = new JScrollPane(jList);
+        scroll.setBorder(null);
 
         panel.add(scroll);
         this.add(panel);
