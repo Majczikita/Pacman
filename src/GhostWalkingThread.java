@@ -3,16 +3,17 @@ import java.util.List;
 
 public class GhostWalkingThread extends GameHandler implements Runnable{
     private final Ghost ghost;
+    private static boolean run;
 
     public GhostWalkingThread(Ghost ghost) {
         this.ghost = ghost;
         addEntityThread(this);
         addThread(this);
+        run = true;
     }
 
     @Override
     public void run() {
-        ghost.setBounds(ghost.setStartingX(), ghost.setStartingY(), Block.BLOCK_LENGTH, Block.BLOCK_LENGTH);
         float blockX, blockY;
         int newX, newY;
         List<Integer> availableDirections = new ArrayList<>();
@@ -22,7 +23,7 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
             throw new RuntimeException(e);
         }
 
-        while(GameHandler.runEntityThread){
+        while(GameHandler.runEntityThread && run){
             blockX = (float) ghost.getX()/Block.BLOCK_LENGTH;
             blockY = (float) ghost.getY()/Block.BLOCK_LENGTH;
             newX = ghost.getX();
@@ -70,5 +71,11 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
                 throw new RuntimeException(e);
             }
         }
+    }
+    public void setGhostOnStartingLocation(){
+        ghost.setStartingPosition();
+    }
+    public static void setRun(boolean run_){
+        run = run_;
     }
 }

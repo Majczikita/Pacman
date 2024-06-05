@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Entity extends Block {
     protected int direction;
@@ -12,8 +11,9 @@ public abstract class Entity extends Block {
 
     protected static final int NULL = -1;
 
-    protected static final int STEP = 5;
-    protected static final int WAIT_TIME = 40;
+    protected static int STEP = 5;
+    protected static int WAIT_TIME = 40;
+    protected static int PACMAN_WAIT_TIME = WAIT_TIME;
 
 
     public Entity(){

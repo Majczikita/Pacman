@@ -49,6 +49,8 @@ public class Score implements Serializable {
     }
 
     public static void saveScore(Score score) {
+        if(!dataLoaded)
+            Score.loadData();
         addAndSort(score);
         saveAllUserData(scoreSorted);
     }

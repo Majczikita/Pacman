@@ -12,8 +12,8 @@ public class Pacman extends Entity implements KeyListener {
     private int savedDirection;
     private int lives;
 
-    private Map parentWindow;
-    private JLabel livesLabel;
+    private final Map parentWindow;
+    private final JLabel livesLabel;
     public static int pointsCollected;
 
     public Pacman(JLabel livesLabel, Map parentWindow){
@@ -89,7 +89,7 @@ public class Pacman extends Entity implements KeyListener {
 
     @Override
     public int setStartingX(){
-        return (Map.map.get(0).size()/2)*Block.BLOCK_LENGTH;
+        return (Map.map.getFirst().size()/2)*Block.BLOCK_LENGTH;
     }
 
     @Override

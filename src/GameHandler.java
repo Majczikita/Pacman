@@ -1,15 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 public abstract class GameHandler {
     public static Font MAIN_FONT = new Font("Arial", Font.BOLD, 20);
-    private static final List<Runnable> entityThreads = new ArrayList<>();
+    public static final List<Runnable> entityThreads = new ArrayList<>();
     private static final List<Runnable> allThreads = new ArrayList<>();
     protected static boolean runEntityThread;
     protected static boolean runThread;
     public static boolean gameOn;
+    public static Map<Runnable, Thread> runnableThreadMap = new HashMap<>();
 
     public static void startGame(){
         runThread = true;
@@ -17,6 +20,7 @@ public abstract class GameHandler {
         for(Runnable thread : allThreads){
             Thread newThread = new Thread(thread);
             newThread.start();
+            if(thread.getClass()==GhostWalkingThread.class) runnableThreadMap.put(thread, newThread);
         }
         gameOn = true;
     }
@@ -64,10 +68,14 @@ public abstract class GameHandler {
     }
 
     public static void startEntityThreads(){
+        runnableThreadMap.clear();
         runEntityThread = true;
-        System.out.println("Threads: " + entityThreads.size());
         for(Runnable entity : entityThreads){
             Thread newThread = new Thread(entity);
+            if(entity.getClass()==GhostWalkingThread.class) {
+                ((GhostWalkingThread) entity).setGhostOnStartingLocation();
+                runnableThreadMap.put(entity, newThread);
+            }
             newThread.start();
         }
     }

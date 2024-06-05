@@ -37,7 +37,11 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
             while (iteratorBonuses.hasNext()) {
                 Bonus bonus = iteratorBonuses.next();
                 if (bonus.getX() == this.pacman.getX() && bonus.getY() == this.pacman.getY()) {
-                    bonus.collected();
+                    try {
+                        bonus.collected();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     iteratorBonuses.remove();
                     break;
                 }
@@ -79,7 +83,7 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
                 pacman.changeLocation(newX, newY);
             }
             try {
-                Thread.sleep(Entity.WAIT_TIME);
+                Thread.sleep(Entity.PACMAN_WAIT_TIME);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

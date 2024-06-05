@@ -1,25 +1,23 @@
-public class PointsValueThread extends GameHandler implements Runnable{
+public class DoubleSpeedThread extends GameHandler implements Runnable{
     private final int seconds;
     private boolean stop;
     private final Thread activeThread;
-    private final int value;
 
-    PointsValueThread(int seconds, Thread activeThread, int value){
+    DoubleSpeedThread(int seconds, Thread activeThread){
         this.seconds = seconds;
-        this.value = value;
         this.activeThread = activeThread;
         stop = false;
     }
     @Override
     public void run() {
-        if(activeThread!=null) {
+        if(activeThread!=null){
             try {
                 activeThread.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        Block.POINT_VALUE = value;
+        Entity.PACMAN_WAIT_TIME/=2;
         for(int i = 0; i <= seconds; i++){
             try {
                 Thread.sleep(1000);
@@ -27,11 +25,11 @@ public class PointsValueThread extends GameHandler implements Runnable{
                 throw new RuntimeException(e);
             }
             if(!runThread || stop){
-                Block.POINT_VALUE = 1;
+                Entity.PACMAN_WAIT_TIME*=2;
                 return;
             }
         }
-        Block.POINT_VALUE = 1;
+        Entity.PACMAN_WAIT_TIME*=2;
     }
     public void stop(){
         stop = true;

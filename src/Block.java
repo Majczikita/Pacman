@@ -10,7 +10,7 @@ public class Block extends JLabel{
     private Color color;
     protected static List<Path> pathWithPoints;
     protected static List<Bonus> bonuses;
-    protected static List<Entity> ghosts;
+    protected static List<Ghost> ghosts;
     protected static List<Entity> entities;
 
     public Block(int x, int y, Color color){

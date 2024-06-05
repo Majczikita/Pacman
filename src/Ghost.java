@@ -5,14 +5,16 @@ public class Ghost extends Entity {
     private String pathR, pathU, pathL, pathD;
     private String mainPath = "src/img";
     private final ColorEnum color;
+    public GhostWalkingThread thread;
 
     public Ghost(ColorEnum colorEnum){
         this.color = colorEnum;
         startingConfig();
+        setStartingPosition();
         setIcon(loadIcon(pathR));
         ghosts.add(this);
         new BonusThread(this);
-        new GhostWalkingThread(this);
+        thread = new GhostWalkingThread(this);
     }
 
     public boolean canTurn(int direction, int x, int y){

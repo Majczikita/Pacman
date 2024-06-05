@@ -10,10 +10,6 @@ public class PacmanAnimationThread extends GameHandler implements Runnable{
 
         addEntityThread(this);
         addThread(this);
-
-//        Thread pacmanAnimationThread = new Thread(this);
-//        addEntityThread(pacmanAnimationThread);
-//        addThread(pacmanAnimationThread);
     }
 
     @Override
