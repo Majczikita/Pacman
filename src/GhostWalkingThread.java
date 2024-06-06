@@ -31,8 +31,10 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
             availableDirections.clear();
             ghost.switchIcon();
 
+            boolean rightPath = blockX % 1 == 0 && blockY % 1 == 0 && blockX != 0 && blockY != 0;
+
             if(ghost.direction == Entity.RIGHT){
-                if(blockX%1==0 && blockY%1==0){
+                if(rightPath){
                     if(ghost.canTurn(Entity.UP, (int)blockX, (int)blockY)) availableDirections.add(Entity.UP);
                     if(ghost.canTurn(Entity.DOWN, (int)blockX, (int)blockY)) availableDirections.add(Entity.DOWN);
                     if(ghost.canTurn(Entity.RIGHT, (int)blockX, (int)blockY)) availableDirections.add(Entity.RIGHT);
@@ -40,7 +42,7 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
                     ghost.direction = ghost.makeStep(newX, newY, availableDirections, Entity.LEFT);
                 } else ghost.setLocation(newX + Entity.STEP, newY);
             } else if(ghost.direction == Entity.DOWN){
-                if(blockX%1==0 && blockY%1==0){
+                if(rightPath){
                     if(ghost.canTurn(Entity.LEFT, (int)blockX, (int)blockY)) availableDirections.add(Entity.LEFT);
                     if(ghost.canTurn(Entity.DOWN, (int)blockX, (int)blockY)) availableDirections.add(Entity.DOWN);
                     if(ghost.canTurn(Entity.RIGHT, (int)blockX, (int)blockY)) availableDirections.add(Entity.RIGHT);
@@ -48,7 +50,7 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
                     ghost.direction = ghost.makeStep(newX, newY, availableDirections, Entity.UP);
                 } else ghost.setLocation(newX, newY + Entity.STEP);
             } else if(ghost.direction == Entity.LEFT){
-                if(blockX%1==0 && blockY%1==0){
+                if(rightPath){
                     if(ghost.canTurn(Entity.LEFT, (int)blockX, (int)blockY)) availableDirections.add(Entity.LEFT);
                     if(ghost.canTurn(Entity.DOWN, (int)blockX, (int)blockY)) availableDirections.add(Entity.DOWN);
                     if(ghost.canTurn(Entity.UP, (int)blockX, (int)blockY)) availableDirections.add(Entity.UP);
@@ -56,7 +58,7 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
                     ghost.direction = ghost.makeStep(newX, newY, availableDirections, Entity.RIGHT);
                 } else ghost.setLocation(newX - Entity.STEP, newY);
             } else if(ghost.direction == Entity.UP){
-                if(blockX%1==0 && blockY%1==0){
+                if(rightPath){
                     if(ghost.canTurn(Entity.LEFT, (int)blockX, (int)blockY)) availableDirections.add(Entity.LEFT);
                     if(ghost.canTurn(Entity.UP, (int)blockX, (int)blockY)) availableDirections.add(Entity.UP);
                     if(ghost.canTurn(Entity.RIGHT, (int)blockX, (int)blockY)) availableDirections.add(Entity.RIGHT);

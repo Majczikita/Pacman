@@ -88,12 +88,12 @@ public class Pacman extends Entity implements KeyListener {
     }
 
     @Override
-    public int setStartingX(){
+    public int getStartingX(){
         return (Map.map.getFirst().size()/2)*Block.BLOCK_LENGTH;
     }
 
     @Override
-    public int setStartingY() {
+    public int getStartingY() {
         if(Map.map.size() == 17){
             return 9 * Block.BLOCK_LENGTH;
         } else if(Map.map.size() == 21){

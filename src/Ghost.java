@@ -78,14 +78,14 @@ public class Ghost extends Entity {
     }
 
     @Override
-    public int setStartingX() {
+    public int getStartingX() {
         if(color == ColorEnum.PINK || color == ColorEnum.RED) return (Map.map.get(0).size()/2)*BLOCK_LENGTH;
         else if (color == ColorEnum.BLUE)return (Map.map.get(0).size()/2-1)*BLOCK_LENGTH;
         else return (Map.map.get(0).size()/2+1)*BLOCK_LENGTH;
     }
 
     @Override
-    public int setStartingY() {
+    public int getStartingY() {
         if(color == ColorEnum.BLUE || color == ColorEnum.ORANGE || color == ColorEnum.PINK){
             if(Map.map.size() == 17 || Map.map.size() == 19){
                 return 7 * BLOCK_LENGTH;

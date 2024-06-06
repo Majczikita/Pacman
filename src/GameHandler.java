@@ -67,9 +67,10 @@ public abstract class GameHandler {
         allThreads.add(runnable);
     }
 
-    public static void startEntityThreads(){
+    public static void startEntityThreads() throws InterruptedException {
         runnableThreadMap.clear();
         runEntityThread = true;
+
         for(Runnable entity : entityThreads){
             Thread newThread = new Thread(entity);
             if(entity.getClass()==GhostWalkingThread.class) {

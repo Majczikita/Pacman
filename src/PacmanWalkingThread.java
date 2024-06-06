@@ -61,7 +61,11 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
                 }
                 pacman.getLivesLabel().setText("Lives: " + pacman.getLives());
 
-                startEntityThreads();
+                try {
+                    startEntityThreads();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             }
 

@@ -17,7 +17,7 @@ public abstract class Entity extends Block {
 
 
     public Entity(){
-        setBounds(setStartingX(), setStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
+        setBounds(getStartingX(), getStartingY(), BLOCK_LENGTH, BLOCK_LENGTH);
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
         if(ghosts==null) ghosts = new ArrayList<>();
@@ -31,8 +31,8 @@ public abstract class Entity extends Block {
         }
     }
     public void setStartingPosition(){
-        this.setBounds(this.setStartingX(), this.setStartingY(), Block.BLOCK_LENGTH, Block.BLOCK_LENGTH);
+        this.setBounds(this.getStartingX(), this.getStartingY(), Block.BLOCK_LENGTH, Block.BLOCK_LENGTH);
     }
-    public abstract int setStartingX();
-    public abstract int setStartingY();
+    public abstract int getStartingX();
+    public abstract int getStartingY();
 }

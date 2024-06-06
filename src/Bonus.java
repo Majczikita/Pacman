@@ -5,8 +5,10 @@ public class Bonus extends Block{
     private BonusType type;
     private static PointsValueThread pointsValueThread;
     private static DoubleSpeedThread doubleSpeedThread;
+    private static GhostStopThread ghostStopThread;
     private static Thread activePointsThread;
     private static Thread activeSpeedThread;
+    private static Thread activeGhostStopThread;
 
     public Bonus(int x, int y){
         super(x, y);
@@ -18,14 +20,14 @@ public class Bonus extends Block{
         int r = random.nextInt(BonusType.values().length);
         String path = "src/img/bonuses/bonus" + (r + 1) + ".png";
         setIcon(loadIcon(path));
-        type = BonusType.doubleSpeed;
-//        switch (r){
-//            case 0 -> type = BonusType.doublePoint;
-//            case 1 -> type = BonusType.doubleSpeed;
-//            case 2 -> type = BonusType.triplePoints;
-//            case 3 -> type = BonusType.ghostsStop;
-//            case 4 -> type = BonusType.ghostsBackToStart;
-//        }
+
+        switch (r){
+            case 0 -> type = BonusType.doublePoint;
+            case 1 -> type = BonusType.doubleSpeed;
+            case 2 -> type = BonusType.triplePoints;
+            case 3 -> type = BonusType.ghostsStop;
+            case 4 -> type = BonusType.ghostsBackToStart;
+        }
     }
 
     public void collected() throws InterruptedException {
@@ -41,21 +43,30 @@ public class Bonus extends Block{
         }
         else if(type == BonusType.doubleSpeed){
             doubleSpeed();
+        } else{
+            ghostsStop();
         }
     }
 
     public void ghostsBackToStart() throws InterruptedException {
         GhostWalkingThread.setRun(false);
+        //stop ghosts' threads and wait for them to finish
         for(Ghost ghost : ghosts){
-            GameHandler.runnableThreadMap.get(ghost.thread).join();
-            GameHandler.runnableThreadMap.remove(ghost.thread);
+            if(GameHandler.runnableThreadMap.get(ghost.thread)!=null) {
+                GameHandler.runnableThreadMap.get(ghost.thread).join();
+                GameHandler.runnableThreadMap.remove(ghost.thread);
+            }
         }
+
+        //rerun ghosts' threads from the starting point
         GhostWalkingThread.setRun(true);
         for(Ghost ghost : ghosts){
             ghost.setStartingPosition();
-            Thread newThread = new Thread(ghost.thread);
-            GameHandler.runnableThreadMap.put(ghost.thread, newThread);
-            newThread.start();
+            if(activeGhostStopThread == null || !activeGhostStopThread.isAlive()) {
+                Thread newThread = new Thread(ghost.thread);
+                GameHandler.runnableThreadMap.put(ghost.thread, newThread);
+                newThread.start();
+            }
         }
     }
     public void doublePoints() {
@@ -75,12 +86,13 @@ public class Bonus extends Block{
         activePointsThread = new Thread(pointsValueThread);
         activePointsThread.start();
     }
-    public void ghostsStop() throws InterruptedException {
-        GhostWalkingThread.setRun(false);
-        for(Ghost ghost : ghosts){
-            GameHandler.runnableThreadMap.get(ghost.thread).join();
-            GameHandler.runnableThreadMap.remove(ghost.thread);
+    public void ghostsStop() {
+        if(ghostStopThread!=null){
+            ghostStopThread.stop();
         }
+        ghostStopThread = new GhostStopThread(seconds, activeGhostStopThread);
+        activeGhostStopThread = new Thread(ghostStopThread);
+        activeGhostStopThread.start();
     }
     public void doubleSpeed(){
         if(doubleSpeedThread!=null){

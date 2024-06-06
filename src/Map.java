@@ -43,6 +43,7 @@ public class Map extends JFrame {
         loadTime();
 
         //add four ghosts
+        if(Block.ghosts!=null) Block.ghosts.clear();
         new Ghost(ColorEnum.RED);
         new Ghost(ColorEnum.PINK);
         new Ghost(ColorEnum.BLUE);

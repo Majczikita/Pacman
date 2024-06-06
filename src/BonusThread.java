@@ -23,10 +23,19 @@ public class BonusThread extends GameHandler implements Runnable{
                     return;
                 }
             }
-            Random random = new Random();
-            int number = random.nextInt(3); // 0 - 3
-            if(number == 1){
-                Map.addBonus(new Bonus(ghost.getX(), ghost.getY()));
+            //making sure ghosts don't produce bonuses on spawn
+            if(!(ghost.getX() == ghost.getStartingX() && ghost.getY() == ghost.getStartingY()) &&
+                !(ghost.getX() == ghost.getStartingX()-10 && ghost.getY() == ghost.getStartingY()) &&
+                !(ghost.getX() == ghost.getStartingX()+10 && ghost.getY() == ghost.getStartingY()) &&
+                !(ghost.getX() == ghost.getStartingX()-20 && ghost.getY() == ghost.getStartingY()) &&
+                !(ghost.getX() == ghost.getStartingX()+20 && ghost.getY() == ghost.getStartingY()) &&
+                !(ghost.getX() == ghost.getStartingX()-30 && ghost.getY() == ghost.getStartingY()) &&
+                !(ghost.getX() == ghost.getStartingX()+30 && ghost.getY() == ghost.getStartingY())){
+                Random random = new Random();
+                int number = random.nextInt(3); // 0 - 3
+                if(number == 1){
+                    Map.addBonus(new Bonus(ghost.getX(), ghost.getY()));
+                }
             }
         }
     }
