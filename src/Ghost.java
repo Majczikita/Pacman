@@ -5,11 +5,11 @@ public class Ghost extends Entity {
     private String pathR, pathU, pathL, pathD;
     private String mainPath = "src/img";
     private final ColorEnum color;
-    public GhostWalkingThread thread;
+    private final GhostWalkingThread thread;
 
     public Ghost(ColorEnum colorEnum){
         this.color = colorEnum;
-        startingConfig();
+        loadPath();
         setStartingPosition();
         setIcon(loadIcon(pathR));
         ghosts.add(this);
@@ -44,6 +44,7 @@ public class Ghost extends Entity {
     public int makeStep(int x, int y, List<Integer> list, int opposite){
         int newDirection;
         if(list.size()==1) newDirection = list.getFirst();
+        //go back if there is no available direction
         else if(list.isEmpty()) newDirection = opposite;
         else newDirection = list.get(pickRandomDirection(list));
 
@@ -56,7 +57,7 @@ public class Ghost extends Entity {
         return newDirection;
     }
 
-    public void startingConfig(){
+    public void loadPath(){
         switch(color){
             case RED:
                 mainPath+="/redGhost";
@@ -77,11 +78,13 @@ public class Ghost extends Entity {
         pathD = mainPath + "/down.png";
     }
 
+    //set different starting position for all ghosts and all maps
+
     @Override
     public int getStartingX() {
-        if(color == ColorEnum.PINK || color == ColorEnum.RED) return (Map.map.get(0).size()/2)*BLOCK_LENGTH;
-        else if (color == ColorEnum.BLUE)return (Map.map.get(0).size()/2-1)*BLOCK_LENGTH;
-        else return (Map.map.get(0).size()/2+1)*BLOCK_LENGTH;
+        if(color == ColorEnum.PINK || color == ColorEnum.RED) return (Map.map.getFirst().size()/2)*BLOCK_LENGTH;
+        else if (color == ColorEnum.BLUE)return (Map.map.getFirst().size()/2-1)*BLOCK_LENGTH;
+        else return (Map.map.getFirst().size()/2+1)*BLOCK_LENGTH;
     }
 
     @Override
@@ -104,6 +107,9 @@ public class Ghost extends Entity {
             } else return 0;
         }
 
+    }
+    public GhostWalkingThread getThread() {
+        return thread;
     }
 
 }

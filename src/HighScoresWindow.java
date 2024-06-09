@@ -2,10 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Serial;
 import java.util.Vector;
 
 public class HighScoresWindow extends JFrame{
+    @Serial
+    private static final long serialVersionUID = -3207388830109024763L;
     private MainMenuWindow parentWindow;
+    protected static Vector<String> scoreVector = new Vector<>();
+    protected static HighScoresList listModel = new HighScoresList(scoreVector);
 
     HighScoresWindow(MainMenuWindow parentWindow) {
         this.parentWindow = parentWindow;
@@ -20,19 +25,19 @@ public class HighScoresWindow extends JFrame{
 
         this.setVisible(true);
     }
+    HighScoresWindow(){}
 
     private void launchHighScores(){
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        //load scores from the file
         if(!Score.getDataLoaded())
             Score.loadData();
 
-        Vector<String> testVector = new Vector<>(Score.listToString());
-        HighScoresList listModel = new HighScoresList(testVector);
-
-        JList jList = new JList(testVector);
+        //create list with scores
+        JList<String> jList = new JList<>();
         jList.setFont(GameHandler.MAIN_FONT);
         jList.setForeground(Color.WHITE);
         jList.setBackground(Color.black);

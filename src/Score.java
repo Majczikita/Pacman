@@ -2,11 +2,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Score implements Serializable {
+public class Score extends HighScoresWindow implements Serializable {
+    @Serial
     private static final long serialVersionUID = -7980315813535367733L;
-    private static List<Score> scoreSorted = new ArrayList<>();
-    private int points;
-    private String name;
+
+    private static final List<Score> scoreSorted = new ArrayList<>();
+    private final int points;
+    private final String name;
     private static boolean dataLoaded;
 
     public Score(String name, int points){
@@ -18,18 +20,20 @@ public class Score implements Serializable {
     public static void addAndSort(Score score){
         if(scoreSorted.isEmpty()) {
             scoreSorted.add(score);
+            listModel.add(score.toString());
             return;
         }
         int counter = 0;
-        List<Score> temp = scoreSorted;
-        for(Score s : temp){
+        for(Score s : scoreSorted){
             if(s.getPoints()<score.points){
                 scoreSorted.add(counter, score);
+                listModel.add(score.toString(), counter);
                 return;
             }
             counter++;
         }
         scoreSorted.add(score);
+        listModel.add(score.toString());
     }
 
     public int getPoints() {
@@ -40,19 +44,12 @@ public class Score implements Serializable {
     public String toString() {
         return name + ": " + points;
     }
-    public static List<String> listToString(){
-        List<String> result = new ArrayList<>();
-        for(Score s : scoreSorted){
-            result.add(s.toString());
-        }
-        return result;
-    }
 
     public static void saveScore(Score score) {
         if(!dataLoaded)
             Score.loadData();
         addAndSort(score);
-        saveAllUserData(scoreSorted);
+        saveAllUserData();
     }
 
     public static List<Score> loadAllUserData() {
@@ -62,8 +59,7 @@ public class Score implements Serializable {
                 Score score = (Score) ois.readObject();
                 list.add(score);
             }
-        } catch (EOFException e) {
-            // End of file reached
+        } catch (EOFException ignored) {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -77,9 +73,9 @@ public class Score implements Serializable {
         }
     }
 
-    private static void saveAllUserData(List<Score> dataList) {
+    private static void saveAllUserData() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/score/scores.txt"))) {
-            for (Score score : dataList) {
+            for (Score score : Score.scoreSorted) {
                 oos.writeObject(score);
             }
         } catch (IOException e) {

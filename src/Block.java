@@ -15,6 +15,7 @@ public class Block extends JLabel{
 
     public Block(int x, int y, Color color){
         setOpaque(true);
+        //coordinates as indexes in array
         this.x = x*BLOCK_LENGTH;
         this.y = y*BLOCK_LENGTH;
         this.color = color;
@@ -33,7 +34,6 @@ public class Block extends JLabel{
     public Block(){}
 
     public void editBlock(){
-        setPreferredSize(new Dimension(BLOCK_LENGTH, BLOCK_LENGTH));
         setBounds(x, y, BLOCK_LENGTH, BLOCK_LENGTH);
         setBackground(color);
         setVisible(true);

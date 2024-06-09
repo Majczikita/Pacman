@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenuWindow extends JFrame {
-    private List<JFrame> openFrames;
+    private final List<JFrame> openFrames;
     private JButton btnNewGame;
     private JButton btnHighScores;
-    private JButton btnExit;
     private HighScoresWindow highScores;
     private MapMenuWindow mapMenuWindow;
 
@@ -22,8 +21,6 @@ public class MainMenuWindow extends JFrame {
         openFrames = new ArrayList<>();
 
         launchMainMenu();
-
-        this.setVisible(true);
     }
 
     public JButton getBtnNewGame() {
@@ -42,7 +39,7 @@ public class MainMenuWindow extends JFrame {
         mapMenuOnClick(btnNewGame);
         btnHighScores = createButton("High Scores");
         highScoresOnClick(btnHighScores);
-        btnExit = createButton("Exit");
+        JButton btnExit = createButton("Exit");
         exitOnClick(btnExit);
 
         //adding buttons to the center of the screen
@@ -73,26 +70,18 @@ public class MainMenuWindow extends JFrame {
     }
 
     public void exitOnClick(JButton btn){
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                closeAllFrames();
-            }
-        });
+        btn.addActionListener(e -> closeAllFrames());
     }
     public void highScoresOnClick(JButton btn){
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    openHighScoresWindow();
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+        btn.addActionListener(e -> {
+            try {
+                openHighScoresWindow();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         });
     }
-    private void openHighScoresWindow() throws Exception {
+    private void openHighScoresWindow() {
         if (highScores == null) {
             highScores = new HighScoresWindow(this);
             highScores.setVisible(true);
@@ -102,14 +91,11 @@ public class MainMenuWindow extends JFrame {
     }
 
     public void mapMenuOnClick(JButton btn){
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    openMapMenuWindow();
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+        btn.addActionListener(e -> {
+            try {
+                openMapMenuWindow();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         });
     }

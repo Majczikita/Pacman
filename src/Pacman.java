@@ -11,7 +11,6 @@ public class Pacman extends Entity implements KeyListener {
     private ImageIcon icon2;
     private int savedDirection;
     private int lives;
-
     private final Map parentWindow;
     private final JLabel livesLabel;
     public static int pointsCollected;
@@ -87,11 +86,11 @@ public class Pacman extends Entity implements KeyListener {
         return false;
     }
 
+    //set different starting position on every map
     @Override
     public int getStartingX(){
         return (Map.map.getFirst().size()/2)*Block.BLOCK_LENGTH;
     }
-
     @Override
     public int getStartingY() {
         if(Map.map.size() == 17){
@@ -127,7 +126,6 @@ public class Pacman extends Entity implements KeyListener {
                 break;
         }
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()){
@@ -153,11 +151,8 @@ public class Pacman extends Entity implements KeyListener {
                 break;
         }
     }
-
     @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
+    public void keyReleased(KeyEvent e) {}
 
     public int getLives() {
         return lives;
@@ -180,7 +175,6 @@ public class Pacman extends Entity implements KeyListener {
     public void setIcon1(ImageIcon icon) {
         this.icon1 = icon;
     }
-
     public ImageIcon getIcon1() {
         return icon1;
     }
@@ -188,7 +182,6 @@ public class Pacman extends Entity implements KeyListener {
     public void setIcon2(ImageIcon icon) {
         this.icon2 = icon;
     }
-
     public ImageIcon getIcon2() {
         return icon2;
     }

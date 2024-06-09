@@ -13,6 +13,7 @@ public class BonusThread extends GameHandler implements Runnable{
     @Override
     public void run() {
         while (runEntityThread){
+            //wait for WAIT_TIME and check if runEntityThread have changed
             for(int i = 0; i<WAIT_TIME/1000; i++){
                 try {
                     Thread.sleep(1000);

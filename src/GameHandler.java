@@ -12,11 +12,13 @@ public abstract class GameHandler {
     protected static boolean runEntityThread;
     protected static boolean runThread;
     public static boolean gameOn;
+    //map of ghosts' threads
     public static Map<Runnable, Thread> runnableThreadMap = new HashMap<>();
 
     public static void startGame(){
         runThread = true;
         runEntityThread = true;
+        //start all threads
         for(Runnable thread : allThreads){
             Thread newThread = new Thread(thread);
             newThread.start();
@@ -82,5 +84,14 @@ public abstract class GameHandler {
     }
     public static void endEntityThreads(){
         runEntityThread = false;
+    }
+    public static void waitForThread(Thread activeThread){
+        if(activeThread!=null && activeThread.isAlive()){
+            try {
+                activeThread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

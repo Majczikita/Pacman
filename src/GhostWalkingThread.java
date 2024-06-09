@@ -23,7 +23,7 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
             throw new RuntimeException(e);
         }
 
-        while(GameHandler.runEntityThread && run){
+        while(runEntityThread && run){
             blockX = (float) ghost.getX()/Block.BLOCK_LENGTH;
             blockY = (float) ghost.getY()/Block.BLOCK_LENGTH;
             newX = ghost.getX();
@@ -31,6 +31,7 @@ public class GhostWalkingThread extends GameHandler implements Runnable{
             availableDirections.clear();
             ghost.switchIcon();
 
+            //rightPath - the middle of the block from where entity can change direction
             boolean rightPath = blockX % 1 == 0 && blockY % 1 == 0 && blockX != 0 && blockY != 0;
 
             if(ghost.direction == Entity.RIGHT){

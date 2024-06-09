@@ -1,32 +1,26 @@
-public class GhostStopThread extends GameHandler implements Runnable{
+public class GhostStopRunnable extends GameHandler implements Runnable{
     private final int seconds;
     private boolean stop;
     private final Thread activeThread;
 
-    GhostStopThread(int seconds, Thread activeThread){
+    GhostStopRunnable(int seconds, Thread activeThread){
         this.seconds = seconds;
         this.activeThread = activeThread;
         stop = false;
     }
     @Override
     public void run() {
-        if(activeThread!=null && activeThread.isAlive()){
-            try {
-                activeThread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        waitForThread(activeThread);
 
         GhostWalkingThread.setRun(false);
         for(Ghost ghost : Block.ghosts){
-            if(GameHandler.runnableThreadMap.get(ghost.thread)!=null){
+            if(GameHandler.runnableThreadMap.get(ghost.getThread())!=null){
                 try {
-                    GameHandler.runnableThreadMap.get(ghost.thread).join();
+                    GameHandler.runnableThreadMap.get(ghost.getThread()).join();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                GameHandler.runnableThreadMap.remove(ghost.thread);
+                GameHandler.runnableThreadMap.remove(ghost.getThread());
             }
         }
 
@@ -44,9 +38,9 @@ public class GhostStopThread extends GameHandler implements Runnable{
         GhostWalkingThread.setRun(true);
         if(runThread && !stop && runEntityThread){
             for(Ghost ghost : Block.ghosts){
-                if(GameHandler.runnableThreadMap.get(ghost.thread)==null){
-                    Thread newThread = new Thread(ghost.thread);
-                    GameHandler.runnableThreadMap.put(ghost.thread, newThread);
+                if(GameHandler.runnableThreadMap.get(ghost.getThread())==null){
+                    Thread newThread = new Thread(ghost.getThread());
+                    GameHandler.runnableThreadMap.put(ghost.getThread(), newThread);
                     newThread.start();
                 }
             }

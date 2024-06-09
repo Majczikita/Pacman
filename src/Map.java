@@ -24,15 +24,10 @@ public class Map extends JFrame {
         setTitle("Pacman");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.black);
-
-        Container contentPane = this.getContentPane();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-
+        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         addCloseListener();
-
-        //add score
-        loadScorePanel();
-
+        //add statistics
+        loadStatisticsPanel();
         //load and add map
         loadFromFile(path);
         loadMap();
@@ -59,6 +54,7 @@ public class Map extends JFrame {
             mainPane.add(entity, JLayeredPane.POPUP_LAYER);
         }
 
+        //center window
         int desiredY = Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 400;
         setLocationRelativeTo(null);
         this.setLocation(getX(), desiredY);
@@ -98,24 +94,17 @@ public class Map extends JFrame {
     }
 
     public void loadFromFile(String path) throws IOException {
-        BufferedReader br = null;
-
-        try {
-            br = new BufferedReader(new FileReader(path));
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String s;
 
             while ((s = br.readLine()) != null) {
                 List<Character> row = new ArrayList<>();
-                for(int i = 0; i < s.length(); i++){
-                    if(s.charAt(i)=='\n') continue;
+                for (int i = 0; i < s.length(); i++) {
+                    if (s.charAt(i) == '\n') continue;
                     row.add(s.charAt(i));
                 }
                 map.add(row);
             }
-
-        } finally {
-            if(br != null)
-                br.close();
         }
     }
 
@@ -130,14 +119,14 @@ public class Map extends JFrame {
         int height = map.size();
         int width = map.getFirst().size();
 
-        this.setSize(width *Block.BLOCK_LENGTH+10, height *Block.BLOCK_LENGTH+Block.BLOCK_LENGTH);
+        this.setSize(width * Block.BLOCK_LENGTH + 10, height * Block.BLOCK_LENGTH + Block.BLOCK_LENGTH);
         mainPane = new JLayeredPane();
-        mainPane.setPreferredSize(new Dimension(width *Block.BLOCK_LENGTH, height *Block.BLOCK_LENGTH));
+        mainPane.setPreferredSize(new Dimension(width * Block.BLOCK_LENGTH, height * Block.BLOCK_LENGTH));
         mapPanel.add(mainPane);
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(height, width));
-        panel.setBounds(0, 0, width *Block.BLOCK_LENGTH, height *Block.BLOCK_LENGTH);
+        panel.setBounds(0, 0, width * Block.BLOCK_LENGTH, height * Block.BLOCK_LENGTH);
 
         int x = 0;
         for(List<Character> row : map){
@@ -157,7 +146,7 @@ public class Map extends JFrame {
         mainPane.add(panel, JLayeredPane.DEFAULT_LAYER);
     }
 
-    public void loadScorePanel(){
+    public void loadStatisticsPanel(){
         scorePanel = new JPanel();
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
         scorePanel.setPreferredSize(new Dimension(400, 100));
@@ -179,7 +168,6 @@ public class Map extends JFrame {
                     ghost.setBounds(0,0,0,0);
                 }
                 Block.clearPaths();
-                //TO DO TESTU - NIE DZIALA XD
                 if(GameHandler.gameOn)
                     GameHandler.endGame();
             }

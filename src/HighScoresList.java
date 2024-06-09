@@ -2,10 +2,10 @@ import javax.swing.*;
 import java.util.Vector;
 
 public class HighScoresList extends AbstractListModel<String> {
-    Vector<String> namesScores;
+    private static Vector<String> namesScores;
 
     public HighScoresList(Vector<String> namesScores){
-        this.namesScores = namesScores;
+        HighScoresList.namesScores = namesScores;
     }
     @Override
     public int getSize() {

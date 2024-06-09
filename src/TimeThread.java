@@ -9,7 +9,6 @@ public class TimeThread extends GameHandler implements Runnable{
         seconds = 0;
         minutes = 0;
         addThread(this);
-        //addThread(new Thread(this));
     }
 
     @Override
@@ -32,8 +31,5 @@ public class TimeThread extends GameHandler implements Runnable{
             label.setText(txt);
         }
 
-    }
-    public void reset(){
-        seconds = 0;
     }
 }

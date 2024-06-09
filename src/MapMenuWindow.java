@@ -6,9 +6,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MapMenuWindow extends JFrame {
-    private MainMenuWindow parentWindow;
+    private final MainMenuWindow parentWindow;
     private Map map;
-    private JButton btnMap1, btnMap2, btnMap3, btnMap4, btnMap5;
 
     MapMenuWindow(MainMenuWindow parentWindow) {
         this.parentWindow = parentWindow;
@@ -43,15 +42,15 @@ public class MapMenuWindow extends JFrame {
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //creating buttons
-        btnMap1 = createButton("Small");
+        JButton btnMap1 = createButton("Small");
         mapOnClick(btnMap1, "src/map/smallMap.txt", this);
-        btnMap2 = createButton("Medium 1");
+        JButton btnMap2 = createButton("Medium 1");
         mapOnClick(btnMap2, "src/map/mediumMap1.txt", this);
-        btnMap3 = createButton("Medium 2");
+        JButton btnMap3 = createButton("Medium 2");
         mapOnClick(btnMap3, "src/map/mediumMap2.txt", this);
-        btnMap4 = createButton("Medium 3");
+        JButton btnMap4 = createButton("Medium 3");
         mapOnClick(btnMap4, "src/map/mediumMap3.txt", this);
-        btnMap5 = createButton("Huge!!!");
+        JButton btnMap5 = createButton("Huge!!!");
         mapOnClick(btnMap5, "src/map/hugeMap.txt", this);
 
         //adding buttons to the center of the screen
@@ -85,21 +84,17 @@ public class MapMenuWindow extends JFrame {
     }
 
     public void mapOnClick(JButton btn, String path, MapMenuWindow w){
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    map = new Map(path, w);
-                    parentWindow.addFrame(map);
-                    closeWindow();
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+        btn.addActionListener(e -> {
+            try {
+                map = new Map(path, w);
+                parentWindow.addFrame(map);
+                closeWindow();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         });
     }
     public void closeWindow(){
-        //parentWindow.getBtnNewGame().setEnabled(false);
         this.dispose();
     }
     public void mapClosed(){

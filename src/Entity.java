@@ -8,7 +8,6 @@ public abstract class Entity extends Block {
     protected static final int RIGHT = 90;
     protected static final int DOWN = 0;
     protected static final int LEFT = 270;
-
     protected static final int NULL = -1;
 
     protected static int STEP = 5;
