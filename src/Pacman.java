@@ -1,9 +1,6 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 
 public class Pacman extends Entity implements KeyListener {
     private ImageIcon icon1;
@@ -50,7 +47,7 @@ public class Pacman extends Entity implements KeyListener {
 
     public boolean tryUp(float x, float y){
         if(direction!=UP && savedDirection == UP && x%1==0 && Map.map.get((int)y-1).get((int)x) == Map.PATH){
-            changeIconDirection(direction, savedDirection);
+            changeIconDirection(savedDirection);
             savedDirection = NULL;
             direction = UP;
             return true;
@@ -59,7 +56,7 @@ public class Pacman extends Entity implements KeyListener {
     }
     public boolean tryDown(float x, float y){
         if(direction!=DOWN && savedDirection == DOWN && x%1==0 && Map.map.get((int)y+1).get((int)x) == Map.PATH){
-            changeIconDirection(direction, savedDirection);
+            changeIconDirection(savedDirection);
             savedDirection = NULL;
             direction = DOWN;
             return true;
@@ -68,7 +65,7 @@ public class Pacman extends Entity implements KeyListener {
     }
     public boolean tryLeft(float x, float y){
         if(direction!=LEFT && savedDirection == LEFT && y%1==0 && Map.map.get((int)y).get((int)x-1) == Map.PATH){
-            changeIconDirection(direction, savedDirection);
+            changeIconDirection(savedDirection);
             savedDirection = NULL;
             direction = LEFT;
             return true;
@@ -77,7 +74,7 @@ public class Pacman extends Entity implements KeyListener {
     }
     public boolean tryRight(float x, float y){
         if(direction!=RIGHT && savedDirection == RIGHT && y%1==0 && Map.map.get((int)y).get((int)x+1) == Map.PATH){
-            changeIconDirection(direction, savedDirection);
+            changeIconDirection(savedDirection);
             savedDirection = NULL;
             direction = RIGHT;
             return true;
@@ -189,21 +186,15 @@ public class Pacman extends Entity implements KeyListener {
         return "src/img/pacmanDie/";
     }
 
-    public void changeIconDirection(int prev, int current){
-        icon1 = rotateIcon(prev - current, icon1);
-        icon2 = rotateIcon(prev - current, icon2);
+    public void changeIconDirection(int direction){
+        switch (direction){
+            case RIGHT -> icon1 = loadIcon("src/img/pacman/right.png");
+            case LEFT -> icon1 = loadIcon("src/img/pacman/left.png");
+            case UP -> icon1 = loadIcon("src/img/pacman/up.png");
+            case DOWN -> icon1 = loadIcon("src/img/pacman/down.png");
+        }
     }
-    public ImageIcon rotateIcon(double degrees, ImageIcon icon) {
-        BufferedImage img = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = img.createGraphics();
 
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(degrees), icon.getIconWidth() / 2, icon.getIconHeight() / 2);
-        g.drawImage(icon.getImage(), transform, null);
-        g.dispose();
-
-        return new ImageIcon(img);
-    }
     public void changeLocation(int x, int y){
         if(direction == RIGHT){
             float blockX = (float)(x-STEP)/Block.BLOCK_LENGTH, blockY = (float)y/Block.BLOCK_LENGTH;

@@ -1,5 +1,5 @@
 public class PacmanAnimationThread extends GameHandler implements Runnable{
-    private static final String pathWalking1 = "src/img/pacman/pacman1.png";
+    private static final String pathWalking1 = "src/img/pacman/right.png";
     private static final String pathWalking2 = "src/img/pacman/pacman2.png";
     private final Pacman pacman;
     private static final int WAIT_TIME = 70;
@@ -15,6 +15,9 @@ public class PacmanAnimationThread extends GameHandler implements Runnable{
 
     @Override
     public void run() {
+        //set pacman's starting direction to the right
+        pacman.direction = Entity.RIGHT;
+        pacman.setIcon1(pacman.loadIcon(pathWalking1));
         while(GameHandler.runEntityThread) {
             pacman.setIcon(pacman.getIcon1());
             try {
