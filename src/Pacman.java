@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 
 public class Pacman extends Entity implements KeyListener {
     private ImageIcon icon1;
@@ -186,22 +185,24 @@ public class Pacman extends Entity implements KeyListener {
         return icon2;
     }
 
+    public String getPathDieAnimation() {
+        return "src/img/pacmanDie/";
+    }
+
     public void changeIconDirection(int prev, int current){
         icon1 = rotateIcon(prev - current, icon1);
         icon2 = rotateIcon(prev - current, icon2);
     }
     public ImageIcon rotateIcon(double degrees, ImageIcon icon) {
-        BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
+        BufferedImage img = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
 
-        // Rotate the image
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(degrees), icon.getIconWidth() / 2, icon.getIconHeight() / 2);
         g.drawImage(icon.getImage(), transform, null);
         g.dispose();
 
-        // Create a new ImageIcon from the rotated image
-        return new ImageIcon(image);
+        return new ImageIcon(img);
     }
     public void changeLocation(int x, int y){
         if(direction == RIGHT){

@@ -28,7 +28,7 @@ public class MainMenuWindow extends JFrame {
     }
 
     public void launchMainMenu(){
-        //creating panel with BoxLayout
+        //creating panel with BoxLayout - to center buttons
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
@@ -45,9 +45,9 @@ public class MainMenuWindow extends JFrame {
         //adding buttons to the center of the screen
         panel.add(Box.createVerticalGlue());
         panel.add(btnNewGame);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(Box.createRigidArea(new Dimension(0, GameHandler.MAIN_FONT.getSize())));
         panel.add(btnHighScores);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(Box.createRigidArea(new Dimension(0, GameHandler.MAIN_FONT.getSize())));
         panel.add(btnExit);
         panel.add(Box.createVerticalGlue());
 

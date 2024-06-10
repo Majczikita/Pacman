@@ -35,7 +35,7 @@ public class MapMenuWindow extends JFrame {
         });
     }
     private void launchMapMenu(){
-        //creating panel with BoxLayout
+        //creating panel with BoxLayout - to center buttons
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
@@ -56,13 +56,13 @@ public class MapMenuWindow extends JFrame {
         //adding buttons to the center of the screen
         panel.add(Box.createVerticalGlue());
         panel.add(btnMap1);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(Box.createRigidArea(new Dimension(0, GameHandler.MAIN_FONT.getSize())));
         panel.add(btnMap2);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(Box.createRigidArea(new Dimension(0, GameHandler.MAIN_FONT.getSize())));
         panel.add(btnMap3);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(Box.createRigidArea(new Dimension(0, GameHandler.MAIN_FONT.getSize())));
         panel.add(btnMap4);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(Box.createRigidArea(new Dimension(0, GameHandler.MAIN_FONT.getSize())));
         panel.add(btnMap5);
         panel.add(Box.createVerticalGlue());
 

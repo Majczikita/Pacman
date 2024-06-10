@@ -36,7 +36,12 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
             iteratorBonuses = Block.bonuses.iterator();
             while (iteratorBonuses.hasNext()) {
                 Bonus bonus = iteratorBonuses.next();
-                if (bonus.getX() == this.pacman.getX() && bonus.getY() == this.pacman.getY()) {
+                //checking in range
+                if ((bonus.getX() == this.pacman.getX() && bonus.getY() == this.pacman.getY()) ||
+                    (bonus.getX() - 5 == this.pacman.getX() && bonus.getY() == this.pacman.getY()) ||
+                    (bonus.getX() + 5 == this.pacman.getX() && bonus.getY() == this.pacman.getY()) ||
+                    (bonus.getX() == this.pacman.getX() && bonus.getY() + 5 == this.pacman.getY()) ||
+                    (bonus.getX() == this.pacman.getX() && bonus.getY() - 5 == this.pacman.getY())) {
                     try {
                         bonus.collected();
                     } catch (InterruptedException e) {
@@ -50,12 +55,20 @@ public class PacmanWalkingThread extends GameHandler implements Runnable{
             //checking collision with ghosts
             if(pacman.isCollision(newX, newY)){
                 endEntityThreads();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
                 pacman.die();
+
+                //die animation
+                String path = pacman.getPathDieAnimation();
+                for(int i = 0; i <= 5; i++){
+                    pacman.setIcon(pacman.loadIcon(path + i + ".png"));
+
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
                 if(pacman.getLives() == 0){
                     GameHandler.endGame(pacman.getParentWindow());
                 }

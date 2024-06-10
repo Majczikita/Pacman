@@ -25,6 +25,9 @@ public class Map extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.black);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        //set this window size to screen size
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+
         addCloseListener();
         //add statistics
         loadStatisticsPanel();
@@ -50,17 +53,14 @@ public class Map extends JFrame {
         GameHandler.startGame();
 
         //add entities to mainPane
-        for(Entity entity : Entity.entities){
-            mainPane.add(entity, JLayeredPane.POPUP_LAYER);
+        for(Ghost ghost : Entity.ghosts){
+            mainPane.add(ghost, JLayeredPane.POPUP_LAYER);
         }
+        mainPane.add(pacman, JLayeredPane.DRAG_LAYER);
 
-        //center window
-        int desiredY = Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 400;
-        setLocationRelativeTo(null);
-        this.setLocation(getX(), desiredY);
         this.setVisible(true);
-        this.pack();
-        this.setMinimumSize(new Dimension(mainPane.getWidth(), scorePanel.getHeight() + mainPane.getHeight()));
+        //user can't get smaller window then the map size
+        this.setMinimumSize(new Dimension(mainPane.getWidth() + 150, scorePanel.getHeight() + mainPane.getHeight() + 200));
     }
 
     public void loadScore(){
@@ -89,7 +89,7 @@ public class Map extends JFrame {
     public void editLabel(JLabel lbl){
         lbl.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lbl.setFont(new Font("Arial", Font.BOLD, 20));
+        lbl.setFont(GameHandler.MAIN_FONT);
         lbl.setForeground(Color.WHITE);
     }
 
@@ -119,7 +119,6 @@ public class Map extends JFrame {
         int height = map.size();
         int width = map.getFirst().size();
 
-        this.setSize(width * Block.BLOCK_LENGTH + 10, height * Block.BLOCK_LENGTH + Block.BLOCK_LENGTH);
         mainPane = new JLayeredPane();
         mainPane.setPreferredSize(new Dimension(width * Block.BLOCK_LENGTH, height * Block.BLOCK_LENGTH));
         mapPanel.add(mainPane);

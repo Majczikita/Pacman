@@ -28,9 +28,9 @@ public class HighScoresWindow extends JFrame{
     HighScoresWindow(){}
 
     private void launchHighScores(){
-        JPanel panel = new JPanel();
+        //using BorderLayout to make JScrollPane resizable
+        JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
-        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //load scores from the file
         if(!Score.getDataLoaded())
@@ -43,11 +43,14 @@ public class HighScoresWindow extends JFrame{
         jList.setBackground(Color.black);
         jList.setFixedCellHeight(GameHandler.MAIN_FONT.getSize()*2);
         jList.setModel(listModel);
+        //center list
+        jList.setCellRenderer(new CenteredListCellRenderer());
 
         JScrollPane scroll = new JScrollPane(jList);
         scroll.setBorder(null);
 
-        panel.add(scroll);
+        panel.add(scroll, BorderLayout.CENTER);
+
         this.add(panel);
     }
 
